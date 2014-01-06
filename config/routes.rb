@@ -1,4 +1,5 @@
 LinkOMatic::Application.routes.draw do
+  devise_for :users
   resources :settings
 
   resources :links
@@ -6,6 +7,8 @@ LinkOMatic::Application.routes.draw do
   resources :finding_aids
 
   resources :projects
+
+  root "projects#index"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
