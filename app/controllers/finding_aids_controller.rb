@@ -1,0 +1,2 @@
+class FindingAidsController < ApplicationController
+end
