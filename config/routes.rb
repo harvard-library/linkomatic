@@ -4,7 +4,11 @@ LinkOMatic::Application.routes.draw do
 
   resources :links
 
-  resources :finding_aids
+  resources :finding_aids do
+    member do
+      get 'status'
+    end
+  end
 
   resources :projects
 

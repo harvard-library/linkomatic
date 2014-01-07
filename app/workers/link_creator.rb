@@ -1,4 +1,4 @@
-class URNFetcher
+class LinkCreator
   require 'open-uri'
 
   include SidekiqStatus::Worker

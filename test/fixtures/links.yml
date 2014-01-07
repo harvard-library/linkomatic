@@ -1,15 +1,1 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  finding_aid: one 
-  component_id: hua19013c00002
-  urn: urn-3:HUL.ARCH:11111650
-  order: 1
-  settings: four
-
-two:
-  finding_aid: one
-  component_id: hua19013c00003
-  urn: urn-3:HUL.ARCH:11111651
-  order: 1
-  settings: five 
