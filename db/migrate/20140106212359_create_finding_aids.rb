@@ -4,7 +4,7 @@ class CreateFindingAids < ActiveRecord::Migration
       t.references :owner, index: true
       t.references :project, index: true
       t.string :url
-      t.string :name
+      t.text :name
       t.references :settings, index: true
 
       t.timestamps
