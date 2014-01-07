@@ -1,7 +1,7 @@
 class URNFetcher
   require 'open-uri'
 
-  #include SidekiqStatus::Worker
+  include SidekiqStatus::Worker
   URL = 'http://oasistest.lib.harvard.edu:9003/oasis/jsp/olivia.jsp?localname={component_id}&authpath=HUL.ARCH'
   NOT_FOUND_MESSAGE = 'No URN found'
 

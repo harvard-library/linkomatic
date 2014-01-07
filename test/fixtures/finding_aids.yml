@@ -1,15 +1,20 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  owner_id: 
-  project_id: 
-  url: MyString
-  name: MyString
-  settings_id: 
+  owner: user
+  project: one
+  url: http://nrs.harvard.edu/urn-3:HUL.ARCH:hua19013 
+  name: 'Harvard University. Department of Athletics. Records of the Harvard University Department of Athletics : team photographs, 1956-1972 : an inventory'
 
 two:
-  owner_id: 
-  project_id: 
-  url: MyString
-  name: MyString
-  settings_id: 
+  owner: user 
+  project: one 
+  url: http://nrs.harvard.edu/urn-3:HMS.Count:med00055
+  name: 'Affiliated Hospitals Center (Boston, Mass.). Records, 1966–1984: Finding Aid.'
+  settings: three
+
+three:
+  owner: user
+  project: one
+  url: http://nrs.harvard.edu/urn-3:RAD.SCHL:sch00411
+  name: '9 to 5, National Association of Working Women (U.S.). Additional records, 1972-1985: A Finding Aid'

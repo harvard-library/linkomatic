@@ -1,7 +1,4 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  settings_id: 
-
-two:
-  settings_id: 
+user:
+  settings: one

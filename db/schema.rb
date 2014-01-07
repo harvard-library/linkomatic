@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20140106213948) do
     t.integer  "owner_id"
     t.integer  "project_id"
     t.string   "url"
-    t.string   "name"
+    t.text     "name"
     t.integer  "settings_id"
     t.datetime "created_at"
     t.datetime "updated_at"

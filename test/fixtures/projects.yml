@@ -1,11 +1,6 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  owner_id: 
-  settings_id: 
-
-two:
-  name: MyString
-  owner_id: 
-  settings_id: 
+  name: Test
+  owner: user 
+  settings: two

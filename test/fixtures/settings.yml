@@ -1,11 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  link_text: MyString
+  link_text: Click here
   thumbnails: false
-  thumbnail_url: MyString
 
 two:
-  link_text: MyString
-  thumbnails: false
-  thumbnail_url: MyString
+  link_text: View image
+  thumbnails: true
+
+three:
+  link_text: Show photo
+  thumbnail_url: http://lorempixel.com/g/50/50
+
+four:
+  link_text: Open
+
+five:
+  thumbnail_url: http://www.iconshock.com/img_jpg/CLEAN/business/jpg/128/trophy_icon.jpg
