@@ -1,0 +1,22 @@
+<div class="jumbotron">
+  <h1>Welcome!</h1>
+  <p>
+  This is a simple project to help automate the insertion of links to
+  digitized records into EAD finding aids.
+  </p>
+  <p>
+  If you don&apos;t already have an account, <%= link_to "sign up", new_user_registration_path %>!
+  </p>
+</div>
+
+<h1>Projects</h1>
+<table class="table">
+  <thead>
+    <tr><th>Name</th><th></th></tr>
+  </thead>
+  <tbody>
+  <% @projects.each do |project| %>
+    <tr><td><%= project.name %></td><td></td></tr>
+  <% end %>
+  </tbody>
+</table>
