@@ -11,45 +11,60 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140106213948) do
+ActiveRecord::Schema.define(version: 20140110170502) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "components", force: true do |t|
+    t.integer  "finding_aid_id"
+    t.integer  "setting_id"
+    t.string   "cid"
+    t.text     "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "components", ["finding_aid_id"], name: "index_components_on_finding_aid_id", using: :btree
+  add_index "components", ["setting_id"], name: "index_components_on_setting_id", using: :btree
+
+  create_table "digitizations", force: true do |t|
+    t.integer  "component_id"
+    t.integer  "setting_id"
+    t.string   "urn"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "digitizations", ["component_id"], name: "index_digitizations_on_component_id", using: :btree
+  add_index "digitizations", ["setting_id"], name: "index_digitizations_on_setting_id", using: :btree
 
   create_table "finding_aids", force: true do |t|
     t.integer  "owner_id"
     t.integer  "project_id"
     t.string   "url"
     t.text     "name"
-    t.integer  "settings_id"
+    t.text     "urn_fetch_jobs"
+    t.integer  "setting_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "finding_aids", ["owner_id"], name: "index_finding_aids_on_owner_id"
-  add_index "finding_aids", ["project_id"], name: "index_finding_aids_on_project_id"
-  add_index "finding_aids", ["settings_id"], name: "index_finding_aids_on_settings_id"
-
-  create_table "links", force: true do |t|
-    t.integer  "finding_aid_id"
-    t.string   "component_id"
-    t.string   "urn"
-    t.integer  "order"
-    t.integer  "settings_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "links", ["finding_aid_id"], name: "index_links_on_finding_aid_id"
-  add_index "links", ["settings_id"], name: "index_links_on_settings_id"
+  add_index "finding_aids", ["owner_id"], name: "index_finding_aids_on_owner_id", using: :btree
+  add_index "finding_aids", ["project_id"], name: "index_finding_aids_on_project_id", using: :btree
+  add_index "finding_aids", ["setting_id"], name: "index_finding_aids_on_setting_id", using: :btree
 
   create_table "projects", force: true do |t|
     t.string   "name"
     t.integer  "owner_id"
-    t.integer  "settings_id"
+    t.integer  "setting_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "projects", ["owner_id"], name: "index_projects_on_owner_id"
-  add_index "projects", ["settings_id"], name: "index_projects_on_settings_id"
+  add_index "projects", ["owner_id"], name: "index_projects_on_owner_id", using: :btree
+  add_index "projects", ["setting_id"], name: "index_projects_on_setting_id", using: :btree
 
   create_table "settings", force: true do |t|
     t.string   "link_text"
@@ -60,7 +75,7 @@ ActiveRecord::Schema.define(version: 20140106213948) do
   end
 
   create_table "users", force: true do |t|
-    t.integer  "settings_id"
+    t.integer  "setting_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email",                  default: "", null: false
@@ -75,8 +90,8 @@ ActiveRecord::Schema.define(version: 20140106213948) do
     t.string   "last_sign_in_ip"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  add_index "users", ["settings_id"], name: "index_users_on_settings_id"
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["setting_id"], name: "index_users_on_setting_id", using: :btree
 
 end

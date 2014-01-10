@@ -2,11 +2,12 @@ LinkOMatic::Application.routes.draw do
   devise_for :users
   resources :settings
 
-  resources :links
+  resources :components
 
   resources :finding_aids do
     member do
       get 'status'
+      post 'fetch_urns'
     end
   end
 

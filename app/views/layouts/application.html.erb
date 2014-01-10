@@ -34,14 +34,25 @@
         </ul>
         </li>
       <% else %>
+          <li><%= link_to "Sign in", new_user_session_path %></li>
           <li><%= link_to "Sign up", new_user_registration_path %></li>
       <% end %>
       </ul>
     </div>
   </div>
 
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+  <% if notice %>
+    <div class="alert alert-success alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= notice %>
+  </div>
+  <% end %>
+  <% if alert %>
+    <div class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= alert %>
+  </div>
+  <% end %>
   <%= yield %>
 </div>
 </body>

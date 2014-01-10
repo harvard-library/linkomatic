@@ -1,51 +1,83 @@
 class FindingAid < ActiveRecord::Base
   require 'csv'
   require 'open-uri'
-  belongs_to :owner
+  belongs_to :owner, class_name: 'User'
   belongs_to :project
-  belongs_to :settings
-  has_many :links
+  belongs_to :setting
+  has_many :components
 
+  serialize :urn_fetch_jobs, Array
+
+  after_create :create_components!
+
+  LIBRARY_NAME_SERVER = 'http://nrs.harvard.edu/'
+  EAD_URL_PATTERN = 'http://oasistest.lib.harvard.edu:9003/oasis/jsp/addDAOs.jsp?eadid={name}&idurnpairs=%3Curns%3E%3C/urns%3E'
   CSV_URL_PATTERN = 'http://oasis.lib.harvard.edu/oasis/csvcomponents/{name}.csv'
   PERSISTENT_URL_PATTERN =
-    /http:\/\/nrs\.harvard\.edu\/urn-3:(?<authpath>[A-Za-z\.]+):(?<name>[a-z0-9]+)/
-  CSV_ID_HEADER = 'ID'
+    Regexp.new(Regexp.escape(LIBRARY_NAME_SERVER) + 'urn-3:(?<authpath>[A-Za-z\.]+):(?<name>[a-z0-9]+)')
+  CSV_ID_HEADER   = 'ID'
+  CSV_NAME_HEADER = 'Unit Title'
+  CSV_URN_HEADER  = 'URN'
+  JOB_STATUSES    = ['waiting', 'working', 'complete', 'failed']
 
   def job_status_pcts
-    Hash[job_status_counts.map{ |k,count| [k, (count.to_f / link_creation_jobs.count * 100).round(1)] }]
+    Hash[job_status_counts.map{
+      |k,count| [k, (count.to_f / [urn_fetch_jobs.count, 1].max * 100).round(1)]
+    }]
   end
 
   def job_status_counts
-    job_statuses.each_with_object(Hash.new(0)){ |s, h| h[s] += 1 }
+    output = job_statuses.each_with_object(Hash.new(0)){ |s, h| h[s] += 1 }
+    (JOB_STATUSES - output.keys).each{|k| output[k] = 0}
+    output
   end
 
   def job_statuses
-    link_creation_jobs.map do |job|
+    urn_fetch_jobs.map do |job|
       SidekiqStatus::Container.load(job).status
     end
   end
 
-  def link_creation_jobs
-    return @link_creation_jobs unless @link_creation_jobs.nil?
-    @link_creation_jobs = []
+  def ead_url
+    EAD_URL_PATTERN.sub('{name}', library_id)
   end
 
-  def create_links!
-    jobs = []
-    component_ids.each do |cid|
-      jobs << LinkCreator.perform_async(id, cid)
-    end
-    @link_creation_jobs = jobs
+  def ead
+    Nokogiri::XML(URI.parse(ead_url).read)
   end
 
-  def component_ids
-    return @component_ids unless @component_ids.nil?
-    csv = CSV.parse(URI.parse(csv_url).read, headers: true)
-    @component_ids = csv[CSV_ID_HEADER]
+  def library_id
+    PERSISTENT_URL_PATTERN.match(url)['name']
   end
 
   def csv_url
-      match = PERSISTENT_URL_PATTERN.match(url)
-      CSV_URL_PATTERN.sub('{name}', match['name'])
+    CSV_URL_PATTERN.sub('{name}', library_id)
+  end
+
+  def fetch_urns!
+    self.urn_fetch_jobs = []
+    components.map(&:cid).each_with_index do |cid, i|
+      urn_fetch_jobs << URNFetcher.perform_async(id, cid, i, components.count)
+    end
+    save!
+  end
+
+  def self.update_job_status(id)
+    finding_aid = FindingAid.find(id)
+
+    if finding_aid.job_status_pcts['complete'] == 100.0
+      # Tell all the clients the current status
+      WebsocketRails[:urn_fetch_jobs_progress].trigger :update, finding_aid.job_status_pcts
+    end
+  end
+
+  def create_components!
+    csv = CSV.parse(URI.parse(csv_url).read, headers: true)
+    csv.each do |row|
+      component = components.create cid: row[CSV_ID_HEADER], name: row[CSV_NAME_HEADER]
+      unless row[CSV_URN_HEADER].blank?
+        component.digitizations.create urn: row[CSV_URN_HEADER].sub(LIBRARY_NAME_SERVER, '')
+      end
+    end
   end
 end

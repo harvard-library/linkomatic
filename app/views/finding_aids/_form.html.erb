@@ -1,0 +1,11 @@
+<%= form_for @finding_aid do |f| %>
+  <div class="form-group">
+    <%= label @finding_aid, :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= label @finding_aid, :url %>
+    <%= f.text_field :url, class: 'form-control' %>
+  </div>
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %>

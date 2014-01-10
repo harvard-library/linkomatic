@@ -3,7 +3,7 @@ class CreateProjects < ActiveRecord::Migration
     create_table :projects do |t|
       t.string :name
       t.references :owner, index: true
-      t.references :settings, index: true
+      t.references :setting, index: true
 
       t.timestamps
     end

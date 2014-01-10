@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class SettingTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "more specific settings overwrite less specific" do
+  end
 end
