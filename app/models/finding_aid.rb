@@ -11,8 +11,8 @@ class FindingAid < ActiveRecord::Base
   after_create :create_components!
 
   LIBRARY_NAME_SERVER = 'http://nrs.harvard.edu/'
-  EAD_URL_PATTERN = 'http://oasistest.lib.harvard.edu:9003/oasis/jsp/addDAOs.jsp?eadid={name}&idurnpairs=%3Curns%3E%3C/urns%3E'
-  CSV_URL_PATTERN = 'http://oasis.lib.harvard.edu/oasis/csvcomponents/{name}.csv'
+  EAD_URL_PATTERN = 'http://oasis.lib.harvard.edu/oasis/ead2002/dtd/{name}'
+  CSV_URL_PATTERN = 'http://oasistest.lib.harvard.edu:9003/oasis/csvcomponents/{name}.csv'
   PERSISTENT_URL_PATTERN =
     Regexp.new(Regexp.escape(LIBRARY_NAME_SERVER) + 'urn-3:(?<authpath>[A-Za-z\.]+):(?<name>[a-z0-9]+)')
   CSV_ID_HEADER   = 'ID'
