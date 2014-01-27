@@ -1,11 +1,19 @@
 <%= form_for @finding_aid do |f| %>
   <div class="form-group">
-    <%= label @finding_aid, :name %>
-    <%= f.text_field :name, class: 'form-control' %>
+    <%= label @finding_aid, :url, 'URL' %>
+    <%= f.text_field :url, class: 'form-control' %>
+    <span class="help-block">
+      The persistent URL to the finding aid. These typically start with "nrs.harvard.edu".
+    </span>
   </div>
   <div class="form-group">
-    <%= label @finding_aid, :url %>
-    <%= f.text_field :url, class: 'form-control' %>
+    <%= label @finding_aid, :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+    <% if params[:action] == 'new' %>
+      <span class="help-block">
+        Leave name blank to have it pulled from the finding aid.
+      </span>
+    <% end %>
   </div>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>

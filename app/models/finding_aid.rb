@@ -8,6 +8,7 @@ class FindingAid < ActiveRecord::Base
 
   serialize :urn_fetch_jobs, Array
 
+  before_create :set_name
   after_create :create_components!
 
   LIBRARY_NAME_SERVER = 'http://nrs.harvard.edu/'
@@ -54,6 +55,10 @@ class FindingAid < ActiveRecord::Base
     CSV_URL_PATTERN.sub('{name}', library_id)
   end
 
+  def urns_fetched?
+    !urn_fetch_jobs.empty?
+  end
+
   def fetch_urns!
     self.urn_fetch_jobs = []
     components.map(&:cid).each_with_index do |cid, i|
@@ -79,5 +84,11 @@ class FindingAid < ActiveRecord::Base
         component.digitizations.create urn: row[CSV_URN_HEADER].sub(LIBRARY_NAME_SERVER, '')
       end
     end
+  end
+
+  private
+
+  def set_name
+    self.name = ead.at('titleproper').text if self.name.blank?
   end
 end

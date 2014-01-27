@@ -4,7 +4,7 @@
 
 <div>
   <%= form_tag fetch_urns_finding_aid_path(@finding_aid), remote: true do %>
-    <%= submit_tag "Fetch URNs", class: 'btn btn-primary' %>
+    <%= submit_tag @finding_aid.urns_fetched? ? "Refetch URNs" : "Fetch URNs", class: 'btn btn-primary' %>
   <% end %>
   <%= link_to "View in OASIS", @finding_aid.url, class: 'btn btn-primary', target: '_blank' %>
 </div>
@@ -31,19 +31,9 @@
     </tr>
   </thead>
   <tbody>
-  <% @finding_aid.components.order(:cid).each do |component| %>
-    <tr>
-      <td><%= component.cid %></td>
-      <td><%= component.name %></td>
-      <td id="cid-<%= component.cid %>">
-        <ul>
-        <% component.digitizations.each do |d| %>
-          <li><%= link_to d.urn, d.url, target: '_blank' %></li>
-        <% end %>
-        </ul>
-      </td>
-    </tr>
-  <% end %>
+  <%= render partial: 'components/row',
+    collection: @finding_aid.components.order(:cid),
+    as: :component %>
   </tbody>
 </table>
 

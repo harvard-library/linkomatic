@@ -16,7 +16,7 @@
   </thead>
   <tbody>
   <% @projects.each do |project| %>
-    <tr><td><%= project.name %></td><td></td></tr>
+    <tr><td><%= link_to project.name, project %></td><td></td></tr>
   <% end %>
   </tbody>
 </table>

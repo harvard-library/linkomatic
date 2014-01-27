@@ -1,0 +1,11 @@
+<tr>
+  <td><%= component.cid %></td>
+  <td><%= component.name %></td>
+  <td id="cid-<%= component.cid %>">
+    <ul>
+      <% component.digitizations.each do |d| %>
+        <li><%= link_to d.urn, d.url, target: '_blank' %></li>
+    <% end %>
+    </ul>
+  </td>
+</tr>
