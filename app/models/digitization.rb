@@ -2,23 +2,12 @@ class Digitization < ActiveRecord::Base
   belongs_to :component
   belongs_to :setting
   acts_as_list scope: :component
+  include Settings
 
   NRS_SERVER = 'http://nrs.harvard.edu/'
 
   def settings
-    component
-    finding_aid = component.finding_aid
-    project = finding_aid.project
-    user = project.owner
-    user.setting.to_h.merge(
-      project.setting.to_h.merge(
-        finding_aid.setting.to_h.merge(
-          component.setting.to_h.merge(
-            setting.to_h
-          )
-        )
-      )
-    )
+    self_and_parent_settings(component)
   end
 
   def url

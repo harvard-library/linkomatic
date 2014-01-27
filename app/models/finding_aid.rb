@@ -21,6 +21,11 @@ class FindingAid < ActiveRecord::Base
   CSV_URN_HEADER  = 'URN'
   JOB_STATUSES    = ['waiting', 'working', 'complete', 'failed']
 
+  include Settings
+  def settings
+    self_and_parent_settings(project)
+  end
+
   def job_status_pcts
     Hash[job_status_counts.map{
       |k,count| [k, (count.to_f / [urn_fetch_jobs.count, 1].max * 100).round(1)]

@@ -2,16 +2,23 @@ LinkOMatic::Application.routes.draw do
   devise_for :users
   resources :settings
 
-  resources :components
-
+  resources :projects do
+    resources :settings
+  end
   resources :finding_aids do
+    resources :settings
     member do
       get 'status'
       post 'fetch_urns'
     end
   end
+  resources :components do
+    resources :settings
+  end
+  resources :digitizations do
+    resources :settings
+  end
 
-  resources :projects
 
   root "projects#index"
 

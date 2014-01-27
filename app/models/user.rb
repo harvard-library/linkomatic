@@ -5,4 +5,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   belongs_to :setting
   has_many :projects
+  include Settings
+
+  def settings
+    self_and_parent_settings
+  end
 end
