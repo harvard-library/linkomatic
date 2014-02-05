@@ -5,9 +5,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   belongs_to :setting
   has_many :projects
+  before_create :set_default_setting
   include Settings
 
-  def settings
-    self_and_parent_settings
+  def parent
+  end
+
+  def set_default_setting
+    self.setting = Setting.create(
+      link_text: 'Click here for digital copy',
+      thumbnails: false
+    )
   end
 end

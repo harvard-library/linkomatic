@@ -4,8 +4,6 @@ class Component < ActiveRecord::Base
 
   has_many :digitizations
   include Settings
-
-  def settings
-    self_and_parent_settings(finding_aid)
-  end
+  
+  alias_method :parent, :finding_aid
 end

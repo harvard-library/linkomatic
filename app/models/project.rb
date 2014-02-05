@@ -4,7 +4,5 @@ class Project < ActiveRecord::Base
   has_many :finding_aids
   include Settings
 
-  def settings
-    self_and_parent_settings(owner)
-  end
+  alias_method :parent, :owner
 end

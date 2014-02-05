@@ -23,7 +23,6 @@ LinkOMatic::Application.routes.draw do
   root "projects#index"
 
   require 'sidekiq/web'
-  require 'sidekiq_status/web'
   mount Sidekiq::Web => '/sidekiq'
 
   # The priority is based upon order of creation: first created -> highest priority.

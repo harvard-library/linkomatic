@@ -6,9 +6,7 @@ class Digitization < ActiveRecord::Base
 
   NRS_SERVER = 'http://nrs.harvard.edu/'
 
-  def settings
-    self_and_parent_settings(component)
-  end
+  alias_method :parent, :component
 
   def url
     NRS_SERVER + urn if urn

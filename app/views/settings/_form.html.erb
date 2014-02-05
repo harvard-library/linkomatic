@@ -3,13 +3,13 @@
     <%= label setting, :link_text %>
     <%= f.text_field :link_text, class: 'form-control' %>
   </div>
-  <div class="form-group">
+  <div class="checkbox">
     <%= label setting, :thumbnails %>
-    <%= f.check_box :thumbnails, class: 'form-control' %>
+    <%= f.check_box :thumbnails %>
   </div>
   <div class="form-group">
     <%= label setting, :thumbnail_url %>
     <%= f.url_field :thumbnail_url, class: 'form-control' %>
   </div>
-  <%= f.submit %>
+  <%= f.submit class: 'btn btn-primary'%>
 <% end %>

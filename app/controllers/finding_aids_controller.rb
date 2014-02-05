@@ -1,11 +1,11 @@
 class FindingAidsController < ApplicationController
-  before_action :load_finding_aid, only: [:destroy, :show, :status, :fetch_urns]
+  before_action :load_finding_aid, only: [:destroy, :edit, :status, :fetch_urns]
 
   def index
     @finding_aids = FindingAid.all
   end
 
-  def show
+  def edit
   end
 
   def new

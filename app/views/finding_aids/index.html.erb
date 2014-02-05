@@ -10,10 +10,10 @@
   <tbody>
   <% @finding_aids.each do |finding_aid| %>
     <tr>
-      <td><%= link_to finding_aid.name, finding_aid_path(finding_aid) %></td>
+      <td><%= link_to finding_aid.name, edit_finding_aid_path(finding_aid) %></td>
       <td><%= link_to finding_aid.url, finding_aid.url, target: '_blank' %></td>
       <% if user_signed_in? && current_user == finding_aid.owner %>
-        <td><%= link_to "Delete", finding_aid_path(finding_aid), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger' %></td>
+        <td><%= link_to "Delete", finding_aid, method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger' %></td>
       <% end %>
     </tr>
   <% end %>

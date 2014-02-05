@@ -4,7 +4,7 @@ class CreateComponents < ActiveRecord::Migration
       t.references :finding_aid, index: true
       t.references :setting, index: true
 
-      t.string :cid
+      t.string :cid, index: true
       t.text :name
 
       t.timestamps

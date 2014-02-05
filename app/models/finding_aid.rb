@@ -5,6 +5,7 @@ class FindingAid < ActiveRecord::Base
   belongs_to :project
   belongs_to :setting
   has_many :components
+  has_many :digitizations, through: :components
 
   serialize :urn_fetch_jobs, Array
 
@@ -19,17 +20,23 @@ class FindingAid < ActiveRecord::Base
   CSV_ID_HEADER   = 'ID'
   CSV_NAME_HEADER = 'Unit Title'
   CSV_URN_HEADER  = 'URN'
-  JOB_STATUSES    = ['waiting', 'working', 'complete', 'failed']
 
   include Settings
-  def settings
-    self_and_parent_settings(project)
+  include SidekiqStatuses
+
+  alias_method :parent, :project
+
+  def to_percent(num)
+    (num * 100).round(1)
   end
 
   def job_status_pcts
-    Hash[job_status_counts.map{
-      |k,count| [k, (count.to_f / [urn_fetch_jobs.count, 1].max * 100).round(1)]
-    }]
+    total = urn_fetch_jobs.count
+    complete = components.joins(:digitizations).uniq.count
+    { 'complete' => to_percent(complete.to_f / total), 'waiting' => to_percent((total - complete).to_f / total)}
+    #Hash[job_status_counts.map{
+    #  |k,count| [k, (count.to_f / [urn_fetch_jobs.count, 1].max * 100).round(1)]
+    #}]
   end
 
   def job_status_counts
@@ -39,9 +46,7 @@ class FindingAid < ActiveRecord::Base
   end
 
   def job_statuses
-    urn_fetch_jobs.map do |job|
-      SidekiqStatus::Container.load(job).status
-    end
+    statuses(urn_fetch_jobs)
   end
 
   def ead_url
@@ -66,6 +71,7 @@ class FindingAid < ActiveRecord::Base
 
   def fetch_urns!
     self.urn_fetch_jobs = []
+    components.each{|c| c.digitizations.destroy_all }
     components.map(&:cid).each_with_index do |cid, i|
       urn_fetch_jobs << URNFetcher.perform_async(id, cid, i, components.count)
     end

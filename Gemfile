@@ -50,7 +50,6 @@ gem 'less-rails-bootstrap'
 
 # For background jobs (like fetching URNs for component IDs)
 gem 'sidekiq'
-gem 'sidekiq_status'
 gem 'sinatra', '>= 1.3.0', :require => nil
 
 # For progress reporting
@@ -61,3 +60,5 @@ gem 'acts_as_list'
 
 # For interacting with EAD
 gem 'nokogiri'
+
+gem 'ruby-prof'

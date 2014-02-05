@@ -4,7 +4,13 @@
   <td id="cid-<%= component.cid %>">
     <ul>
       <% component.digitizations.each do |d| %>
-        <li><%= link_to d.urn, d.url, target: '_blank' %></li>
+        <li>
+        <% if d.urn.nil? %>
+          No URNs Found
+        <% else %>
+          <%= link_to d.urn, d.url, target: '_blank' %>
+        <% end %>
+        </li>
     <% end %>
     </ul>
   </td>
