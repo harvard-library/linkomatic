@@ -1,8 +1,21 @@
 class FindingAidsController < ApplicationController
-  before_action :load_finding_aid, only: [:destroy, :edit, :status, :fetch_urns]
+  before_action :load_finding_aid, only: [:destroy, :edit, :show, :status, :fetch_urns]
+  before_action :load_project, only: [:create]
 
   def index
     @finding_aids = FindingAid.all
+  end
+
+  def show
+    @doc = @finding_aid.ead
+    @doc.css('dao').map(&:remove)
+    @doc.css('daogrp').map(&:remove)
+    @finding_aid.components.each do |c|
+      component_node = @doc.at('#' + c.cid)
+      c.digitizations.each do |d|
+        component_node << render_to_string(partial: 'digitizations/show.ead.erb', locals: { digitization: d })
+      end
+    end
   end
 
   def edit
@@ -13,9 +26,13 @@ class FindingAidsController < ApplicationController
   end
 
   def create
-    @finding_aid = FindingAid.new(finding_aid_params)
+    if @project
+      @finding_aid = @project.finding_aids.build(finding_aid_params)
+    else
+      @finding_aid = current_user.finding_aids.build(finding_aid_params)
+    end
     if @finding_aid.save
-      redirect_to finding_aid_path(@finding_aid), notice: 'Finding aid successfully created'
+      redirect_to edit_finding_aid_path(@finding_aid), notice: 'Finding aid successfully created'
     end
   end
 
@@ -42,6 +59,12 @@ class FindingAidsController < ApplicationController
   
   def load_finding_aid
     @finding_aid = FindingAid.find(params[:id])
+  end
+
+  def load_project
+    if params[:project_id]
+      @project = Project.find(params[:project_id])
+    end
   end
 
   def finding_aid_params

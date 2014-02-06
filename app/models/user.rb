@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   belongs_to :setting
   has_many :projects
+  has_many :finding_aids, foreign_key: 'owner_id'
   before_create :set_default_setting
   include Settings
 
