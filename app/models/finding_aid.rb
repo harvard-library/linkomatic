@@ -14,7 +14,7 @@ class FindingAid < ActiveRecord::Base
 
   LIBRARY_NAME_SERVER = 'http://nrs.harvard.edu/'
   EAD_URL_PATTERN = 'http://oasis.lib.harvard.edu/oasis/ead2002/dtd/{name}'
-  CSV_URL_PATTERN = 'http://oasistest.lib.harvard.edu:9003/oasis/csvcomponents/{name}.csv'
+  CSV_URL_PATTERN = 'http://oasis.lib.harvard.edu/oasis/csvcomponents/{name}.csv'
   PERSISTENT_URL_PATTERN =
     Regexp.new(Regexp.escape(LIBRARY_NAME_SERVER) + 'urn-3:(?<authpath>[A-Za-z\.]+):(?<name>[a-z0-9]+)')
   CSV_ID_HEADER   = 'ID'
@@ -88,11 +88,15 @@ class FindingAid < ActiveRecord::Base
   end
 
   def create_components!
-    csv = CSV.parse(URI.parse(csv_url).read, headers: true)
-    csv.each do |row|
-      component = components.create cid: row[CSV_ID_HEADER], name: row[CSV_NAME_HEADER]
-      unless row[CSV_URN_HEADER].blank?
-        component.digitizations.create urn: row[CSV_URN_HEADER].sub(LIBRARY_NAME_SERVER, '')
+    ead.css('c').each do |c|
+      if unittitle = c.at('unittitle')
+        name = unittitle.content
+      elsif container = c.at('container')
+        name = container.content
+      end
+      component = components.create cid: c['id'], name: name
+      c.css('> did dao',' > dao').each do |dao|
+        component.digitizations.create urn: dao['href'].sub(LIBRARY_NAME_SERVER, '').sub(/\?.*$/,'')
       end
     end
   end

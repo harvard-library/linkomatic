@@ -24,3 +24,9 @@ four:
   project: one
   url: http://nrs.harvard.edu/urn-3:HUL.ARCH:hua04010
   name: 'Harvard University. Corporation. Records of Grants for Work among the Indians, 1720- 1812: an inventory'
+
+five:
+  owner: user
+  project: one
+  url: http://nrs.harvard.edu/urn-3:FHCL.Hough:hou01467
+  name: 'American Board of Commissioners for Foreign Missions. American Board of Commissioners for Foreign Missions archives, 1810-1961: Guide.'

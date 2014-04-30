@@ -11,7 +11,6 @@ module Settings
 
   def create_settings
     self.setting = Setting.create(settings)
-    puts self.inspect
   end
 
   def self_and_parent_settings(parent = nil)

@@ -4,6 +4,8 @@ class Digitization < ActiveRecord::Base
   acts_as_list scope: :component
   include Settings
 
+  default_scope {order(:position)}
+
   NRS_SERVER = 'http://nrs.harvard.edu/'
 
   alias_method :parent, :component
