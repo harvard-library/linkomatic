@@ -1,29 +1,37 @@
 <div class="page-header">
-  <h1><%= @finding_aid.name %></h1>
+  <h1><%= @finding_aid.name %>
+    <%= link_to "View in OASIS", @finding_aid.url, class: 'btn btn-primary', target: '_blank' %>
+    <%= link_to 'Show EAD', @finding_aid, class: 'btn btn-primary' %>
+  </h1>
 </div>
 
-<div>
-  <%= form_tag fetch_urns_finding_aid_path(@finding_aid), remote: true do %>
-    <%= submit_tag @finding_aid.urns_fetched? ? "Refetch URNs" : "Fetch URNs", class: 'btn btn-primary' %>
-  <% end %>
-  <%= link_to "View in OASIS", @finding_aid.url, class: 'btn btn-primary', target: '_blank' %>
+
+<%= render partial: 'settings/form', locals: { object: @finding_aid } %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Fetch URNs</h3>
+  </div>
+  <div class="panel-body">
+    <div>
+      <%= form_tag fetch_urns_finding_aid_path(@finding_aid), remote: true do %>
+        <%= submit_tag @finding_aid.urns_fetched? ? "Refetch URNs" : "Fetch URNs", class: 'btn btn-primary' %>
+    <% end %>
+    </div>
+    <h4>Progress</h4>
+    <div class="progress">
+      <div class="progress-bar progress-bar-danger" id="progress-failed" style="width: 0%">
+        <span class="sr-only">10% Complete (danger)</span>
+      </div>
+      <div class="progress-bar progress-bar-success" id="progress-complete" style="width: 0%">
+        <span class="sr-only">35% Complete (success)</span>
+      </div>
+      <div class="progress-bar progress-bar-warning" id="progress-working" style="width: 0%">
+        <span class="sr-only">20% Complete (warning)</span>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div class="progress">
-  <div class="progress-bar progress-bar-danger" id="progress-failed" style="width: 0%">
-    <span class="sr-only">10% Complete (danger)</span>
-  </div>
-  <div class="progress-bar progress-bar-success" id="progress-complete" style="width: 0%">
-    <span class="sr-only">35% Complete (success)</span>
-  </div>
-  <div class="progress-bar progress-bar-warning" id="progress-working" style="width: 0%">
-    <span class="sr-only">20% Complete (warning)</span>
-  </div>
-</div>
-
-<%= render partial: 'settings/form', locals: { setting: @finding_aid.setting } %>
-<%= link_to 'Show', @finding_aid %>
-
 <h2>Components</h2>
 <table class="table table-condensed">
   <thead>
@@ -47,7 +55,7 @@
     });
   }
 
-  var dispatcher = new WebSocketRails('<%= Rails.configuration.host %>:<%= Rails.configuration.port %>/websocket');
+  var dispatcher = new WebSocketRails('<%= Rails.configuration.host %>:<%= Rails.configuration.websocket_port %>/websocket');
   dispatcher.on_open = function() {
     $.get('<%= status_finding_aid_path(@finding_aid) %>', updateProgressBar)
   };
@@ -55,8 +63,8 @@
   jobChannel = dispatcher.subscribe('urn_fetch_job');
   jobChannel.bind('complete', function(job) {
     $('#cid-' + job.component_id + ' ul').empty();
-    if (job.urls.length == 0) {
-      $('#cid-' + job.component_id).text('No URNs found');
+    if (!job.urls[0]) {
+      $('#cid-' + job.component_id + ' ul').append('<li>No URNs Found</>');
     } else {
       $.each(job.urls, function(i, url) {
         $('#cid-' + job.component_id + ' ul').append('<li><a href="' + url + '" target="_blank">' + job.urns[i] + '</a></li>');

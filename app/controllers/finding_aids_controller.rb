@@ -3,7 +3,7 @@ class FindingAidsController < ApplicationController
   before_action :load_project, only: [:create]
 
   def index
-    @finding_aids = FindingAid.all
+    @finding_aids = current_user.finding_aids
   end
 
   def show

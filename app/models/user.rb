@@ -4,18 +4,28 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   belongs_to :setting
-  has_many :projects
+  has_many :projects, foreign_key: 'owner_id'
   has_many :finding_aids, foreign_key: 'owner_id'
-  before_create :set_default_setting
+  before_create :set_defaults
+  after_create :add_example_finding_aid
+
   include Settings
 
   def parent
   end
 
-  def set_default_setting
+  def set_defaults
+    self.projects.build(name: 'Default Project')
     self.setting = Setting.create(
       link_text: 'Click here for digital copy',
       thumbnails: false
+    )
+  end
+
+  def add_example_finding_aid
+    self.projects.first.finding_aids.create(
+      name: 'Example finding aid',
+      url: 'http://nrs.harvard.edu/urn-3:HUL.ARCH:hua19013'
     )
   end
 end

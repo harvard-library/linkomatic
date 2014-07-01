@@ -21,8 +21,7 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="<%= params[:controller] == 'projects' ? 'active' : '' %>"><%= link_to "Projects", projects_path %></li>
-        <li class="<%= params[:controller] == 'finding_aids' ? 'active' : '' %>"><%= link_to "Finding Aids", finding_aids_path %></li>
+        <li class="<%= params[:controller] == 'finding_aids' ? 'active' : '' %>"><%= link_to "My Finding Aids", finding_aids_path %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>

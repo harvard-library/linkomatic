@@ -1,15 +1,22 @@
-<%= form_for setting do |f| %>
-  <div class="form-group">
-    <%= label setting, :link_text %>
-    <%= f.text_field :link_text, class: 'form-control' %>
+<div class="panel panel-default">
+  <div class="panel-heading" data-toggle="collapse" data-target="#settings">
+    <h3 class="panel-title"><%= object.class.name.underscore.humanize.titleize %> Settings<span class="caret"></span></h3>
   </div>
-  <div class="checkbox">
-    <%= label setting, :thumbnails %>
-    <%= f.check_box :thumbnails %>
+  <div id="settings" class="panel-body collapse">
+    <%= form_for object.setting do |f| %>
+      <div class="form-group">
+        <%= label object.setting, :link_text %>
+        <%= f.text_field :link_text, class: 'form-control' %>
+      </div>
+      <div class="checkbox">
+        <%= label object.setting, :thumbnails %>
+        <%= f.check_box :thumbnails %>
+      </div>
+      <div class="form-group">
+        <%= label object.setting, :thumbnail_url %>
+        <%= f.url_field :thumbnail_url, class: 'form-control' %>
+      </div>
+      <%= f.submit class: 'btn btn-primary'%>
+    <% end %>
   </div>
-  <div class="form-group">
-    <%= label setting, :thumbnail_url %>
-    <%= f.url_field :thumbnail_url, class: 'form-control' %>
-  </div>
-  <%= f.submit class: 'btn btn-primary'%>
-<% end %>
+</div>
