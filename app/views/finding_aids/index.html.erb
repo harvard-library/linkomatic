@@ -1,5 +1,5 @@
 <h1>Finding Aids by Project</h1>
-<ul>
+<ul class="list-unstyled">
   <% current_user.projects.each do |project| %>
     <li>
       <h2><%= link_to project.name, edit_project_path(project) %></h2>

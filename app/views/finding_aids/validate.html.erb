@@ -1,0 +1,17 @@
+<h2 class="text-danger">Errors</h2>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4">
+      <ul class="ead-errors list-unstyled">
+        <% @finding_aid.validation_errors.each do |error| %>
+          <li class="text-danger">
+              <strong>Line <span><%= error.line %></span></strong>: <%= error %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-md-8">
+      <pre class="ead"><%= finding_aid_xml_with_line_nums(@finding_aid) %></pre>
+    </div>
+  </div>
+</div>

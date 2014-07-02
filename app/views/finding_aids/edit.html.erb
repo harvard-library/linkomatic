@@ -1,10 +1,10 @@
 <div class="page-header">
   <h1><%= @finding_aid.name %>
     <%= link_to "View in OASIS", @finding_aid.url, class: 'btn btn-primary', target: '_blank' %>
-    <%= link_to 'Show EAD', @finding_aid, class: 'btn btn-primary' %>
+    <%= link_to 'Validate', validate_finding_aid_path(@finding_aid), class: 'btn btn-primary' %>
+    <%= link_to 'Show EAD', finding_aid_path(@finding_aid, format: :xml), class: 'btn btn-primary' %>
   </h1>
 </div>
-
 
 <%= render partial: 'settings/form', locals: { object: @finding_aid } %>
 

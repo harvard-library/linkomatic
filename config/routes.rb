@@ -10,6 +10,7 @@ LinkOMatic::Application.routes.draw do
     member do
       get 'status'
       post 'fetch_urns'
+      get 'validate'
     end
   end
   resources :components do

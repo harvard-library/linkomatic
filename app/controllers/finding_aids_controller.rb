@@ -1,5 +1,5 @@
 class FindingAidsController < ApplicationController
-  before_action :load_finding_aid, only: [:destroy, :edit, :show, :status, :fetch_urns]
+  before_action :load_finding_aid, only: [:destroy, :edit, :show, :status, :fetch_urns, :validate]
   before_action :load_project, only: [:create]
 
   def index
@@ -7,14 +7,9 @@ class FindingAidsController < ApplicationController
   end
 
   def show
-    @doc = @finding_aid.ead
-    @doc.css('dao').map(&:remove)
-    @doc.css('daogrp').map(&:remove)
-    @finding_aid.components.each do |c|
-      component_node = @doc.at('#' + c.cid)
-      c.digitizations.each do |d|
-        component_node << render_to_string(partial: 'digitizations/show.ead.erb', locals: { digitization: d })
-      end
+    respond_to do |format|
+      format.html
+      format.xml
     end
   end
 
@@ -53,6 +48,9 @@ class FindingAidsController < ApplicationController
 
   def status
     render json: @finding_aid.job_status_pcts
+  end
+
+  def validate
   end
 
   private

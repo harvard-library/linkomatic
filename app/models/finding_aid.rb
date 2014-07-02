@@ -57,6 +57,17 @@ class FindingAid < ActiveRecord::Base
     Nokogiri::XML(URI.parse(ead_url).read)
   end
 
+  def output_ead
+    controller = ApplicationController.new
+    ead_string = controller.with_format(:xml) do 
+      controller.render_to_string(
+        partial: 'finding_aids/ead',
+        locals: { finding_aid: self }
+      )
+    end
+    Nokogiri::XML(ead_string)
+  end
+
   def library_id
     PERSISTENT_URL_PATTERN.match(url)['name']
   end
@@ -101,7 +112,38 @@ class FindingAid < ActiveRecord::Base
     end
   end
 
+  def validation_errors
+    doc = output_ead
+    schema = get_local_schema(doc)
+    schema.validate(doc)
+  end
+
   private
+
+  def get_local_schema(doc)
+    schema_url = doc.at('ead').attributes['noNamespaceSchemaLocation'].content
+    schema_xml = URI.parse(schema_url).read
+    schema_file = Tempfile.new('schema', Rails.root.join('tmp'))
+    schema_file.write(schema_xml)
+
+    if import = schema_xml.match(/import[^>]*schemaLocation="(?<location>[^"]*)"/)
+      parsed_schema_url = schema_url.match(/^(.*\/)([^\/]*)$/)
+      if import['location'].start_with? 'http'
+        imported_url = import['location']
+      else
+        imported_url = parsed_schema_url[1] + import['location']
+      end
+      # Write import to file system
+      File.open(Rails.root.join('tmp', import['location']), 'w'){ |f| f.write(URI.parse(imported_url).read) }
+      Dir.chdir(Rails.root.join('tmp'))
+      schema = Nokogiri::XML::Schema(schema_file.open)
+      Dir.chdir(Rails.root)
+    else
+      schema = Nokogiri::XML::Schema(schema_file.open)
+    end
+
+    schema
+  end
 
   def set_name
     self.name = ead.at('titleproper').text if self.name.blank?
