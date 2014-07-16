@@ -1,6 +1,6 @@
 class FindingAidsController < ApplicationController
   before_action :load_finding_aid, only: [:destroy, :edit, :show, :status, :fetch_urns, :validate]
-  before_action :load_project, only: [:create]
+  before_action :load_project, only: [:create, :new]
 
   def index
     @finding_aids = current_user.finding_aids
@@ -51,6 +51,11 @@ class FindingAidsController < ApplicationController
   end
 
   def validate
+    begin
+      @errors = @finding_aid.validation_errors
+    rescue
+      redirect_to edit_finding_aid_path(@finding_aid), alert: "Sorry, we could not attempt validation. Probably couldn't fetch the schema."
+    end
   end
 
   private

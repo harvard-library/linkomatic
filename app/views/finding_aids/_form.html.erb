@@ -1,4 +1,4 @@
-<%= form_for @finding_aid do |f| %>
+<%= form_for (@project ? [@project, @finding_aid] : @finding_aid) do |f| %>
   <div class="form-group">
     <%= label @finding_aid, :url, 'URL' %>
     <%= f.url_field :url, class: 'form-control' %>

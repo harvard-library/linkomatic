@@ -17,3 +17,23 @@
 //= require_tree .
 //= require websocket_rails/main
 
+$(document).on('submit', 'form', function(e) {
+    $(e.target).find('input[type=submit], button').attr('disabled', true);
+});
+
+$(document).ajaxSuccess(function(e) {
+    if (e.target.activeElement.nodeName == 'BODY') {
+      var $selector = $('input[type=submit]:disabled, button:disabled');
+      if ($selector.length > 0 && $selector.first().attr('value').indexOf('etch URNs') > -1) {
+        var message = 'Fetching...';
+      } else {
+        var message = 'Saved';
+      }
+      $('<div class="label label-success pull-right">' + message + '</div>').insertAfter($selector).delay(500).fadeOut(500, function() {
+        $(this).remove();
+        $selector.attr('disabled', false);
+      });
+    } else {
+      $('<div class="label label-success">Saved</div>').insertAfter(e.target.activeElement).delay(500).fadeOut(500, function() { $(this).remove(); });
+    }
+});

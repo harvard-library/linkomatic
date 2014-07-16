@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 
   def set_defaults
     self.projects.build(name: 'Default Project')
-    self.setting = Setting.create(
+    self.create_setting(
       link_text: 'Click here for digital copy',
       thumbnails: false
     )

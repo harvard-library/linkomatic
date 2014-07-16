@@ -10,7 +10,7 @@ module Settings
   end
 
   def create_settings
-    self.setting = Setting.create(settings)
+    self.setting = Setting.create unless self.setting
   end
 
   def self_and_parent_settings(parent = nil)

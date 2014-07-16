@@ -1,7 +1,16 @@
 class SettingsController < ApplicationController
-  before_action :load_parent
+  before_action :load_parent, :load_setting
 
-  def edit
+  def update
+    respond_to do |format|
+      if @setting.update(setting_params)
+        format.html { redirect_to @setting, notice: 'Settings were successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @setting.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   private
@@ -18,5 +27,13 @@ class SettingsController < ApplicationController
     else
       @parent = current_user
     end
+  end
+
+  def load_setting
+    @setting = Setting.find params[:id]
+  end
+
+  def setting_params
+    params.require(:setting).permit(:link_text, :thumbnails, :thumbnail_url)
   end
 end

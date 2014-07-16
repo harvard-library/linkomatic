@@ -1,19 +1,20 @@
 <div class="panel panel-default">
   <div class="panel-heading" data-toggle="collapse" data-target="#settings">
-    <h3 class="panel-title"><%= object.class.name.underscore.humanize.titleize %> Settings<span class="caret"></span></h3>
+    <h3 class="panel-title"><%= object.class.name.underscore.humanize.titleize %> EAD Settings<span class="caret"></span></h3>
   </div>
-  <div id="settings" class="panel-body collapse">
-    <%= form_for object.setting do |f| %>
+  <% shown ||= false %>
+  <div id="settings" class="panel-body <%= shown ? '' : 'collapse' %>">
+    <%= form_for [object, object.setting], format: :json, remote: true do |f| %>
       <div class="form-group">
-        <%= label object.setting, :link_text %>
+        <%= f.label :link_text %>
         <%= f.text_field :link_text, class: 'form-control' %>
       </div>
       <div class="checkbox">
-        <%= label object.setting, :thumbnails %>
+        <%= f.label :thumbnails %>
         <%= f.check_box :thumbnails %>
       </div>
       <div class="form-group">
-        <%= label object.setting, :thumbnail_url %>
+        <%= f.label :thumbnail_url %>
         <%= f.url_field :thumbnail_url, class: 'form-control' %>
       </div>
       <%= f.submit class: 'btn btn-primary'%>

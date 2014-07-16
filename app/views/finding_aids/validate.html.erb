@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-4">
       <ul class="ead-errors list-unstyled">
-        <% @finding_aid.validation_errors.each do |error| %>
+        <% @errors.each do |error| %>
           <li class="text-danger">
               <strong>Line <span><%= error.line %></span></strong>: <%= error %>
           </li>

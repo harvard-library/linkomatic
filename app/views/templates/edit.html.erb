@@ -1,0 +1,12 @@
+<%= form_for @template do |f| %>
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="form-group">
+    <%= f.label :body %>
+    <%= f.text_area :body %>
+  </div>
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %>
+
