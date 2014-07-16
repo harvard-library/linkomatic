@@ -56,7 +56,7 @@
     });
   }
 
-  var dispatcher = new WebSocketRails('<%= Rails.configuration.host %>:<%= Rails.configuration.websocket_port %>/websocket');
+  var dispatcher = new WebSocketRails('<%= Rails.configuration.websocket_url %>');
   dispatcher.on_open = function() {
     $.get('<%= status_finding_aid_path(@finding_aid) %>', updateProgressBar)
   };
