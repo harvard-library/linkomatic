@@ -2,7 +2,7 @@
 <ul class="list-unstyled">
   <% current_user.projects.each do |project| %>
     <li>
-      <h2><%= link_to project.name, edit_project_path(project) %></h2>
+      <h2><%= project.name %> <small><%= link_to 'Edit', edit_project_path(project) %></small></h2>
       <ul>
         <% project.finding_aids.each do |finding_aid| %>
           <li><%= link_to finding_aid.name, edit_finding_aid_path(finding_aid) %></li>

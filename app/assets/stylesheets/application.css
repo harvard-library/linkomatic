@@ -12,3 +12,7 @@
  *= require custom_bootstrap/custom_bootstrap
  *= require_tree .
  */
+
+.panel-heading[data-toggle="collapse"] .panel-title {
+  cursor: pointer;
+}
