@@ -6,6 +6,7 @@ module FindingAidsHelper
     finding_aid.components.each do |c|
       component_node = doc.at('#' + c.cid)
       c.digitizations.each do |d|
+        next unless d.urn
         component_node << render(partial: 'digitizations/show.ead.erb', locals: { digitization: d })
       end
     end
