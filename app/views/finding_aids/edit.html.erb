@@ -1,6 +1,6 @@
 <div class="page-header">
   <h1><%= @finding_aid.name %></h1>
-  <div><%= @finding_aid.url %></div>
+  <p><%= @finding_aid.url %></p>
   <ul class="list-inline">
     <li><%= link_to "View in OASIS", @finding_aid.url, class: 'btn btn-primary', target: '_blank' %></li>
     <li><%= link_to 'Validate', validate_finding_aid_path(@finding_aid), class: 'btn btn-primary' %></li>
