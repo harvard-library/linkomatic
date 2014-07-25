@@ -4,10 +4,10 @@ module FindingAidsHelper
     doc.css('dao').map(&:remove)
     doc.css('daogrp').map(&:remove)
     finding_aid.components.each do |c|
-      component_node = doc.at('#' + c.cid)
+      component_did = doc.at("##{c.cid} did")
       c.digitizations.each do |d|
         next unless d.urn
-        component_node << render(partial: 'digitizations/show.ead.erb', locals: { digitization: d })
+        component_did << render(partial: 'digitizations/show.ead.erb', locals: { digitization: d })
       end
     end
     doc
