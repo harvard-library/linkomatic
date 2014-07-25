@@ -14,8 +14,8 @@ class URNFetcher
       WebsocketRails[:urn_fetch_jobs_progress].trigger :update, finding_aid.job_status_pcts
     end
 
-    if urns == NOT_FOUND_MESSAGE && component.digitizations.empty?
-      component.digitizations.create urn: nil
+    if urns == NOT_FOUND_MESSAGE
+      component.digitizations.create(urn: nil) if component.digitizations.empty?
     else
       urns.split(',').each{|urn| component.digitizations.find_or_create_by urn: urn}
     end

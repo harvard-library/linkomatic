@@ -82,7 +82,6 @@ class FindingAid < ActiveRecord::Base
 
   def fetch_urns!
     self.urn_fetch_jobs = []
-    components.each{|c| c.digitizations.destroy_all }
     components.map(&:cid).each_with_index do |cid, i|
       urn_fetch_jobs << URNFetcher.perform_async(id, cid, i, components.count)
     end
