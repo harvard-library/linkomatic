@@ -32,6 +32,10 @@ GEM
     builder (3.1.4)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.4)
+      climate_control (>= 0.0.3, < 1.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -67,13 +71,13 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.1)
     kgio (2.8.1)
-    less (2.4.0)
+    less (2.5.1)
       commonjs (~> 0.2.7)
-    less-rails (2.4.2)
+    less-rails (2.5.0)
       actionpack (>= 3.1)
-      less (~> 2.4.0)
-    less-rails-bootstrap (3.0.6)
-      less-rails (~> 2.4.2)
+      less (~> 2.5.0)
+    less-rails-bootstrap (3.2.0)
+      less-rails (~> 2.5.0)
     libv8 (3.16.14.3)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -85,6 +89,11 @@ GEM
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     orm_adapter (0.5.0)
+    paperclip (4.2.0)
+      activemodel (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.3)
+      mime-types
     pg (0.17.1)
     polyglot (0.3.5)
     rack (1.5.2)
@@ -184,8 +193,9 @@ DEPENDENCIES
   devise
   jbuilder (~> 1.2)
   jquery-rails
-  less-rails-bootstrap
+  less-rails-bootstrap (~> 3.2)
   nokogiri
+  paperclip (~> 4.2)
   pg
   rails (= 4.0.6)
   ruby-prof

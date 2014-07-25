@@ -71,6 +71,6 @@ class FindingAidsController < ApplicationController
   end
 
   def finding_aid_params
-    params.require(:finding_aid).permit(:name, :url)
+    params.require(:finding_aid).permit(:name, :url, :uploaded_ead)
   end
 end

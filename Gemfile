@@ -43,7 +43,7 @@ gem 'unicorn', group: :development
 gem 'devise'
 
 gem 'therubyracer'
-gem 'less-rails-bootstrap'
+gem 'less-rails-bootstrap', '~> 3.2'
 
 # For background jobs (like fetching URNs for component IDs)
 gem 'sidekiq'
@@ -59,3 +59,5 @@ gem 'acts_as_list'
 gem 'nokogiri'
 
 gem 'ruby-prof'
+
+gem "paperclip", "~> 4.2"

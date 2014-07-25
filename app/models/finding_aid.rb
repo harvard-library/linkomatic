@@ -8,9 +8,14 @@ class FindingAid < ActiveRecord::Base
   has_many :digitizations, through: :components
 
   serialize :urn_fetch_jobs, Array
+  has_attached_file :uploaded_ead, default_url: nil
+  validates_attachment_content_type :uploaded_ead, :content_type => /\Atext\/xml\Z/
 
-  before_create :set_name
-  after_create :create_components!
+  before_create :set_name, unless: 'uploaded_ead.present?'
+  after_create :create_components!, unless: 'uploaded_ead.present?'
+
+  after_save :set_name, if: 'uploaded_ead.present? && name.blank?'
+  after_save :create_components!, if: 'uploaded_ead.present? && components.empty?'
 
   LIBRARY_NAME_SERVER = 'http://nrs.harvard.edu/'
   EAD_URL_PATTERN = 'http://oasis.lib.harvard.edu/oasis/ead2002/dtd/{name}'
@@ -50,11 +55,17 @@ class FindingAid < ActiveRecord::Base
   end
 
   def ead_url
-    EAD_URL_PATTERN.sub('{name}', library_id)
+    return uploaded_ead.url if uploaded_ead.present?
+    return EAD_URL_PATTERN.sub('{name}', library_id) if url
   end
 
   def ead
-    Nokogiri::XML(URI.parse(ead_url).read)
+    if uploaded_ead.present?
+      xml = File.open(uploaded_ead.path)
+    else
+      xml = URI.parse(ead_url).read
+    end
+    Nokogiri::XML(xml)
   end
 
   def output_ead
@@ -146,5 +157,6 @@ class FindingAid < ActiveRecord::Base
 
   def set_name
     self.name = ead.at('titleproper').text if self.name.blank?
+    save unless new_record?
   end
 end
