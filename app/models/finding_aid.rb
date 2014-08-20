@@ -156,6 +156,7 @@ class FindingAid < ActiveRecord::Base
   end
 
   def set_name
+    logger.info("EAD: #{ead.to_s}")
     self.name = ead.at('titleproper').text if self.name.blank?
     save unless new_record?
   end

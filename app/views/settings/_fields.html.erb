@@ -1,0 +1,14 @@
+<div class="form-group">
+  <%= f.label :link_text %>
+  <%= f.text_field :link_text, class: 'form-control' %>
+</div>
+<div class="checkbox">
+  <%= f.label :thumbnails do %>
+    <%= f.check_box :thumbnails %>
+    Thumbnails
+  <% end %>
+</div>
+<div class="form-group">
+  <%= f.label :thumbnail_url %>
+  <%= f.url_field :thumbnail_url, class: 'form-control' %>
+</div>

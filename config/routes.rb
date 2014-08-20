@@ -1,6 +1,4 @@
 LinkOMatic::Application.routes.draw do
-  resources :templates
-
   devise_for :users
   resources :settings
   resources :users, only: [] do
@@ -27,7 +25,7 @@ LinkOMatic::Application.routes.draw do
   end
 
 
-  root "finding_aids#index"
+  root "projects#index"
 
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'

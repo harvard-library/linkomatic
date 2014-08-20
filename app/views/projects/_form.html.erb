@@ -1,10 +1,9 @@
-<%= render partial: 'settings/form', locals: { object: @project, shown: true } %>
-
 <%= form_for @project do |f| %>
   <div class="form-group">
   <%= f.label :name %>
   <%= f.text_field :name, class: 'form-control' %>
   </div>
+  <%= render partial: 'settings/embedded_form', locals: { form: f, object: @project } %>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>
 

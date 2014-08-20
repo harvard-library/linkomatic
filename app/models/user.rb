@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :finding_aids, foreign_key: 'owner_id'
   before_create :set_defaults
   after_create :add_example_finding_aid
+  accepts_nested_attributes_for :setting
 
   include Settings
 

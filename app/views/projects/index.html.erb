@@ -1,19 +1,13 @@
 <div class="jumbotron">
-  <h1>Welcome!</h1>
   <p>
-  This is a simple project to help automate the insertion of links to
-  digitized records into EAD finding aids.
+  <strong>Welcome to Link-o-matic!</strong>
   </p>
+  <p>This is a simple project to help automate the insertion of links to
+  digitized records into EAD finding aids.</p>
+  <p>To get started, check out the example finding aid we&apos;ve added for you below or process a new finding aid.</p>
 </div>
 
-<h1>Projects</h1>
-<table class="table">
-  <thead>
-    <tr><th>Name</th><th></th></tr>
-  </thead>
-  <tbody>
-  <% @projects.each do |project| %>
-    <tr><td><%= link_to project.name, project %></td><td></td></tr>
-  <% end %>
-  </tbody>
-</table>
+<h1 class="project-title">My Projects <small><%= link_to 'Create New Project', new_project_path %></small></h1>
+<% current_user.projects.order(:created_at).each do |project| %>
+  <%= render partial: 'projects/project', object: project %>
+<% end %>

@@ -1,3 +1,27 @@
 // Place all the styles related to the Projects controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.project-title {
+  small {
+    font-size: 0.5em;
+  }
+  margin-bottom: 0.5em;
+}
+
+.project {
+  h3 {
+    margin: 0.2em 0;
+    font-size: 1.3em;
+  }
+
+  .settings {
+    margin-top: 2.5em;
+  }
+
+  .finding-aids {
+    ul {
+      margin: 1em 0;
+    }
+  }
+}

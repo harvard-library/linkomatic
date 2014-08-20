@@ -7,6 +7,7 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new
+    @project.build_setting
   end
 
   def create
@@ -19,7 +20,7 @@ class ProjectsController < ApplicationController
   def update
     respond_to do |format|
       if @project.update(project_params)
-        format.html { redirect_to finding_aids_path, notice: 'The project was successfully updated.' }
+        format.html { redirect_to projects_path, notice: 'The project was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -41,6 +42,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name)
+    params.require(:project).permit(:name, setting_attributes: [ :link_text, :thumbnails, :thumbnail_url ])
   end
 end

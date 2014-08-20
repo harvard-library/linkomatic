@@ -1,0 +1,10 @@
+<dl class="well setting dl-horizontal">
+  <dt>Link Text:</dt><dd>&quot;<%= setting['link_text'] %>&quot;</dd>
+  <dt>Show Thumnails:</dt><dd><%= setting['thumbnails'].to_s.capitalize %></dd>
+  <% if setting['thumbnails'] %>
+    <dt>Default Thumbnail:</dt>
+    <dd>
+    <%= setting['thumbnail_url'] ? image_tag(setting['thumbnail_url']) : 'None' %>
+    </dd>
+  <% end %>
+</dl>

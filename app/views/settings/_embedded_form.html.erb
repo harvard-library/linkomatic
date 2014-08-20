@@ -1,0 +1,10 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= object.class.name.underscore.humanize.titleize %> EAD Settings<span class="caret"></span></h3>
+  </div>
+  <div class="panel-body">
+    <%= form.fields_for :setting_attributes, object.setting do |setting_f| %>
+      <%= render partial: 'settings/fields', locals: { f: setting_f } %>
+  <% end %>
+  </div>
+</div>

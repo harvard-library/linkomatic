@@ -20,11 +20,12 @@
   <div class="form-group"><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
   <%= f.password_field :current_password, class: 'form-control' %></div>
 
+  <%= render partial: 'settings/embedded_form', locals: { object: resource, form: f } %>
+
   <%= f.submit "Update", class: 'btn btn-primary' %>
 <% end %>
 
 <br />
-<%= render partial: 'settings/form', locals: { object: resource, shown: true } %>
 
 <h3>Cancel my account</h3>
 
