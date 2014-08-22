@@ -4,8 +4,8 @@
   <ul class="list-inline">
     <li><%= link_to "View in OASIS", @finding_aid.url, class: 'btn btn-primary', target: '_blank' %></li>
     <li><%= link_to 'Validate', validate_finding_aid_path(@finding_aid), class: 'btn btn-primary' %></li>
-    <li><%= link_to 'Show EAD', finding_aid_path(@finding_aid, format: :xml), class: 'btn btn-primary' %></li>
     <li><%= link_to 'View OASIS EAD', @finding_aid.ead_url, class: 'btn btn-primary' %></li>
+    <li><%= link_to 'Show EAD', finding_aid_path(@finding_aid, format: :xml), class: 'btn btn-success' %></li>
   </ul>
 </div>
 <%= render partial: 'settings/form', locals: { object: @finding_aid } %>

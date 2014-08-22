@@ -70,7 +70,7 @@ class FindingAid < ActiveRecord::Base
 
   def output_ead
     controller = ApplicationController.new
-    ead_string = controller.with_format(:xml) do 
+    ead_string = controller.with_format(:xml) do
       controller.render_to_string(
         partial: 'finding_aids/ead',
         locals: { finding_aid: self }
@@ -117,7 +117,8 @@ class FindingAid < ActiveRecord::Base
       end
       component = components.create cid: c['id'], name: name
       c.css('> did dao',' > dao').each do |dao|
-        component.digitizations.create urn: dao['href'].sub(LIBRARY_NAME_SERVER, '').sub(/\?.*$/,'')
+        href = dao['href'] || dao['xlink:href']
+        component.digitizations.create urn: href.sub(LIBRARY_NAME_SERVER, '').sub(/\?.*$/,'')
       end
     end
   end
