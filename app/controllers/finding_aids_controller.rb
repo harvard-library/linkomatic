@@ -38,7 +38,9 @@ class FindingAidsController < ApplicationController
 
   def fetch_urns
     @finding_aid.fetch_urns!
-    WebsocketRails[:urn_fetch_jobs_progress].trigger :update, @finding_aid.job_status_pcts
+    statuses = @finding_aid.job_status_percentages
+    WebsocketRails[:urn_fetch_jobs_progress].trigger :update, statuses
+
     if request.xhr?
       render text: 'true'
     else
@@ -47,7 +49,7 @@ class FindingAidsController < ApplicationController
   end
 
   def status
-    render json: @finding_aid.job_status_pcts
+    render json: @finding_aid.job_status_percentages
   end
 
   def validate

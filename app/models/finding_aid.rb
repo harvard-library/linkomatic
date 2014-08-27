@@ -7,7 +7,7 @@ class FindingAid < ActiveRecord::Base
   has_many :components
   has_many :digitizations, through: :components
 
-  serialize :urn_fetch_jobs, Array
+  serialize :urn_fetch_jobs, Hash
   has_attached_file :uploaded_ead, default_url: nil
   validates_attachment_content_type :uploaded_ead, :content_type => /\Atext\/xml\Z/
 
@@ -27,7 +27,6 @@ class FindingAid < ActiveRecord::Base
   CSV_URN_HEADER  = 'URN'
 
   include Settings
-  include SidekiqStatuses
 
   alias_method :parent, :project
 
@@ -35,13 +34,10 @@ class FindingAid < ActiveRecord::Base
     (num * 100).round(1)
   end
 
-  def job_status_pcts
+  def job_status_percentages
     total = urn_fetch_jobs.count
-    complete = components.joins(:digitizations).uniq.count
+    complete = urn_fetch_jobs.values.select{|v| v == 'complete'}.count
     { 'complete' => to_percent(complete.to_f / total), 'waiting' => to_percent((total - complete).to_f / total)}
-    #Hash[job_status_counts.map{
-    #  |k,count| [k, (count.to_f / [urn_fetch_jobs.count, 1].max * 100).round(1)]
-    #}]
   end
 
   def job_status_counts
@@ -51,7 +47,7 @@ class FindingAid < ActiveRecord::Base
   end
 
   def job_statuses
-    statuses(urn_fetch_jobs)
+    urn_fetch_jobs.values
   end
 
   def ead_url
@@ -84,7 +80,7 @@ class FindingAid < ActiveRecord::Base
   end
 
   def authpath
-    PERSISTENT_URL_PATTERN.match(url)['authpath']
+    PERSISTENT_URL_PATTERN.match(url)['authpath'].sub('.EAD', '')
   end
 
   def csv_url
@@ -96,20 +92,12 @@ class FindingAid < ActiveRecord::Base
   end
 
   def fetch_urns!
-    self.urn_fetch_jobs = []
+    self.urn_fetch_jobs = {}
     components.map(&:cid).each_with_index do |cid, i|
-      urn_fetch_jobs << URNFetcher.perform_async(id, cid, i, components.count)
+      jid = URNFetcher.perform_async(id, cid, i, components.count)
+      self.urn_fetch_jobs[jid] = 'waiting'
     end
     save!
-  end
-
-  def self.update_job_status(id)
-    finding_aid = FindingAid.find(id)
-
-    if finding_aid.job_status_pcts['complete'] == 100.0
-      # Tell all the clients the current status
-      WebsocketRails[:urn_fetch_jobs_progress].trigger :update, finding_aid.job_status_pcts
-    end
   end
 
   def create_components!
@@ -122,6 +110,13 @@ class FindingAid < ActiveRecord::Base
       component = components.create cid: c['id'], name: name
       c.css('> did dao',' > dao').each do |dao|
         href = dao['href'] || dao['xlink:href']
+        component.digitizations.create urn: href.sub(LIBRARY_NAME_SERVER, '').sub(/\?.*$/,'')
+      end
+      c.css('> did daogrp').each do |daogrp|
+        daoloc = daogrp.css('daoloc')
+        next if daoloc.empty?
+        daoloc = daoloc.last
+        href = daoloc['href'] || daoloc['xlink:href']
         component.digitizations.create urn: href.sub(LIBRARY_NAME_SERVER, '').sub(/\?.*$/,'')
       end
     end
@@ -161,7 +156,6 @@ class FindingAid < ActiveRecord::Base
   end
 
   def set_name
-    logger.info("EAD: #{ead.to_s}")
     self.name = ead.at('titleproper').text if self.name.blank?
     save unless new_record?
   end

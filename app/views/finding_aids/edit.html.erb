@@ -16,9 +16,7 @@
   </div>
   <div class="panel-body">
     <div>
-      <%= form_tag fetch_urns_finding_aid_path(@finding_aid), remote: true do %>
-        <%= submit_tag @finding_aid.urns_fetched? ? "Refetch URNs" : "Fetch URNs", class: 'btn btn-primary' %>
-    <% end %>
+      <%= link_to @finding_aid.urns_fetched? ? "Refetch URNs" : "Fetch URNs", '#', id: 'refetch', class: 'btn btn-primary' %>
     </div>
     <h4>Progress</h4>
     <div class="progress">
@@ -57,23 +55,38 @@
     });
   }
 
-  var dispatcher = new WebSocketRails('<%= Rails.configuration.websocket_url %>');
+  var findingAidId = <%= @finding_aid.id %>,
+      dispatcher = new WebSocketRails('<%= Rails.configuration.websocket_url %>');
+
   dispatcher.on_open = function() {
-    $.get('<%= status_finding_aid_path(@finding_aid) %>', updateProgressBar)
+    dispatcher.trigger('fetch_job.register', { finding_aid_id: findingAidId });
   };
+
+  dispatcher.bind('fetch_job.status', updateProgressBar);
 
   jobChannel = dispatcher.subscribe('urn_fetch_job');
   jobChannel.bind('complete', function(job) {
-    $('#cid-' + job.component_id + ' ul').empty();
+    // Tell the dispatcher we saw a job complete, as it can't see channels
+    dispatcher.trigger('fetch_job.complete', { jid: job.jid });
+    var $row = $('#cid-' + job.component_id).parent();
+    var $ul = $row.find('ul');
+
+    $ul.empty();
+    $row.addClass('bg-info');
     if (!job.urls[0]) {
-      $('#cid-' + job.component_id + ' ul').append('<li>No URNs Found</>');
+      $ul.append('<li>No URNs Found</>');
     } else {
       $.each(job.urls, function(i, url) {
-        $('#cid-' + job.component_id + ' ul').append('<li><a href="' + url + '" target="_blank">' + job.urns[i] + '</a></li>');
+        $ul.append('<li><a href="' + url + '" target="_blank">' + job.urns[i] + '</a></li>');
       });
     }
   });
 
-  progressChannel = dispatcher.subscribe('urn_fetch_jobs_progress');
-  progressChannel.bind('update', updateProgressBar);
+  $('#refetch').on('click', function(e) {
+    $('tr').removeClass('bg-info');
+    $('<div class="label label-success pull-right">Fetching...</div>')
+      .insertAfter($(this)).delay(500).fadeOut(500);
+    dispatcher.trigger('fetch_job.new');
+    e.preventDefault();
+  });
 </script>

@@ -23,11 +23,7 @@ $(document).on('submit', 'form', function(e) {
 $(document).ajaxSuccess(function(e) {
     if (e.target.activeElement.nodeName == 'BODY') {
       var $selector = $('input[type=submit]:disabled, button:disabled');
-      if ($selector.length > 0 && $selector.first().attr('value').indexOf('etch URNs') > -1) {
-        var message = 'Fetching...';
-      } else {
-        var message = 'Saved';
-      }
+      var message = 'Saved';
       $('<div class="label label-success pull-right">' + message + '</div>').insertAfter($selector).delay(500).fadeOut(500, function() {
         $(this).remove();
         $selector.attr('disabled', false);
