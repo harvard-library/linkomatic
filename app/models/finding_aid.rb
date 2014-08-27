@@ -83,6 +83,10 @@ class FindingAid < ActiveRecord::Base
     PERSISTENT_URL_PATTERN.match(url)['name']
   end
 
+  def authpath
+    PERSISTENT_URL_PATTERN.match(url)['authpath']
+  end
+
   def csv_url
     CSV_URL_PATTERN.sub('{name}', library_id)
   end

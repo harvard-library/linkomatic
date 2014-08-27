@@ -2,13 +2,16 @@ class URNFetcher
   require 'open-uri'
   include FindingAidsHelper
   include Sidekiq::Worker
-  URL = 'http://oasistest.lib.harvard.edu:9003/oasis/jsp/olivia.jsp?localname={component_id}&authpath=HUL.ARCH'
+  sidekiq_options retry: false
+
+  URL = 'http://oasistest.lib.harvard.edu:9003/oasis/jsp/olivia.jsp?localname={component_id}&authpath={authpath}'
   NOT_FOUND_MESSAGE = 'No URN found'
 
   def perform(finding_aid_id, component_id, i, total_components)
     finding_aid = FindingAid.find(finding_aid_id)
     component = finding_aid.components.find_by_cid(component_id)
-    urns = URI.parse(URL.sub('{component_id}', component_id)).read
+    url = URL.sub('{component_id}', component_id).sub('{authpath}', finding_aid.authpath)
+    urns = URI.parse(url).read
 
     if finding_aid.urn_fetch_jobs.count == total_components
       WebsocketRails[:urn_fetch_jobs_progress].trigger :update, finding_aid.job_status_pcts
