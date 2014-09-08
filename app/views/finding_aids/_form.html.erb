@@ -1,4 +1,20 @@
 <%= form_for (@project ? [@project, @finding_aid] : @finding_aid) do |f| %>
+  <div class="form-group">
+    <%= f.label :owner_code, 'Owner Code' %>
+    <%= f.text_field :owner_code, class: 'form-control' %>
+    <span class="help-block">
+      What is the owner code for this finding aid?
+    </span>
+  </div>
+  <div class="form-group">
+    <%= label @finding_aid, :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+    <% if params[:action] == 'new' %>
+      <span class="help-block">
+        Leave name blank to have it pulled from the finding aid.
+      </span>
+    <% end %>
+  </div>
   <div class="panel panel-default">
     <div class="panel-heading"><h3 class="panel-title">Source</h3></div>
     <div class="panel-body">
@@ -20,14 +36,5 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <%= label @finding_aid, :name %>
-    <%= f.text_field :name, class: 'form-control' %>
-    <% if params[:action] == 'new' %>
-      <span class="help-block">
-        Leave name blank to have it pulled from the finding aid.
-      </span>
-    <% end %>
-  </div>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>

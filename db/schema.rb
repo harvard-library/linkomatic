@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140725175641) do
+ActiveRecord::Schema.define(version: 20140908180155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20140725175641) do
     t.string   "uploaded_ead_content_type"
     t.integer  "uploaded_ead_file_size"
     t.datetime "uploaded_ead_updated_at"
+    t.string   "owner_code"
   end
 
   add_index "finding_aids", ["owner_id"], name: "index_finding_aids_on_owner_id", using: :btree

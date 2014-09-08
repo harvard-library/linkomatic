@@ -11,6 +11,7 @@ class URNFetcher
     finding_aid = FindingAid.find(finding_aid_id)
     component = finding_aid.components.find_by_cid(component_id)
     url = URI.encode(URL.sub('{component_id}', component_id).sub('{authpath}', finding_aid.authpath))
+    logger.info "Fetching: #{url}"
     urns = URI.parse(url).read
 
     if urns == NOT_FOUND_MESSAGE

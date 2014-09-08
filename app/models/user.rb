@@ -26,7 +26,8 @@ class User < ActiveRecord::Base
   def add_example_finding_aid
     self.projects.first.finding_aids.create(
       name: 'Example finding aid',
-      url: 'http://nrs.harvard.edu/urn-3:HUL.ARCH:hua19013'
+      url: 'http://nrs.harvard.edu/urn-3:HUL.ARCH:hua19013',
+      owner_code: 'HUL.ARCH'
     )
   end
 end

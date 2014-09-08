@@ -80,7 +80,8 @@ class FindingAid < ActiveRecord::Base
   end
 
   def authpath
-    PERSISTENT_URL_PATTERN.match(url)['authpath'].sub('.EAD', '')
+    self.owner_code
+    #PERSISTENT_URL_PATTERN.match(url)['authpath']
   end
 
   def csv_url
