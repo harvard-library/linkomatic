@@ -7,9 +7,9 @@
   <arc xmlns:xlink="http://www.w3.org/1999/xlink" linktype="arc" xlink:from="start" xlink:show="new" xlink:to="resource-2"/>
 </daogrp>
 <% else %>
-<dao xmlns:xlink="http://www.w3.org/1999/xlink" linktype="simple" xlink:actuate="onRequest" xlink:show="new" xlink:href="<%= digitization.url %>">
+<dao xlink:actuate="onRequest" xlink:href="<%= digitization.url %>" xlink:show="new" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink">
   <daodesc>
-    <p><%= digitization.settings['link_text'] %></p>
+      <p><%= digitization.settings['link_text'] %></p>
   </daodesc>
 </dao>
 <% end %>
