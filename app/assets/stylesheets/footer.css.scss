@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'Apercu';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Apercu'), url(/fonts/apercu_regular-web.woff) format('woff2');
+}
+
+.footer {
+  margin: 0 auto 10px;
+  width: 940px;
+  border-top: 2px solid black;
+  padding-top: 30px;
+  text-align: center;
+  font-family: "Apercu", sans-serif;
+
+  .ll-logo {
+    margin-bottom: 24px;
+  }
+  p {
+    max-width: 700px;
+    line-height: 2em;
+    margin: 0 auto;
+  }
+  a {
+    text-decoration: underline;
+  }
+}

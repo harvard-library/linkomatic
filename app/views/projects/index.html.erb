@@ -11,3 +11,10 @@
 <% current_user.projects.order(:created_at).each do |project| %>
   <%= render partial: 'projects/project', object: project %>
 <% end %>
+
+<div class="footer">
+  <%= image_tag 'LL_mini.png', alt: 'Library Lab Logo', class: 'll-logo' %>
+  <p>
+  Thanks to the generous support of the <a href="http://lab.library.harvard.edu/">Harvard Library Lab</a>, the <a href="https://osc.hul.harvard.edu">Harvard Library Office for Scholarly Communication</a>, the <a href="http://cyber.law.harvard.edu">Berkman Center for Internet &amp; Society</a> and the <a href="http://www.arcadiafund.org.uk">Arcadia Fund</a>.
+  </p>
+</div>
