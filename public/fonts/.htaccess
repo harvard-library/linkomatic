@@ -1,4 +1,3 @@
-asdlkjj
 SetEnvIf Referer linkomatic\.dev\.berkmancenter\.org localreferer
 
 <FilesMatch \.(eot|woff|ttf|svg)$>
