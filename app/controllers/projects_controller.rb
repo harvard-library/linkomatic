@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :load_project, only: [:show, :edit, :update]
+  before_action :load_project, only: [:show, :edit, :update, :destroy]
 
   def index
     @projects = current_user.projects
@@ -8,6 +8,11 @@ class ProjectsController < ApplicationController
   def new
     @project = Project.new
     @project.build_setting
+  end
+
+  def destroy
+    @project.destroy
+    redirect_to root_path, notice: 'Project deleted.'
   end
 
   def create

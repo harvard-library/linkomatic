@@ -35,7 +35,7 @@ class FindingAidsController < ApplicationController
 
   def destroy
     @finding_aid.destroy
-    redirect_to finding_aids_path, notice: 'Finding aid deleted.'
+    redirect_to root_path, notice: 'Finding aid removed.'
   end
 
   def fetch_urns

@@ -1,6 +1,6 @@
 class Digitization < ActiveRecord::Base
   belongs_to :component
-  belongs_to :setting
+  belongs_to :setting, dependent: :destroy
   acts_as_list scope: :component
   include Settings
 

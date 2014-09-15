@@ -1,13 +1,26 @@
 <div class="project panel panel-default">
   <div class="panel-heading">
-    <h2 class="panel-title"><%= project.name %> </h2>
+    <h2 class="panel-title"><%= project.name %>
+      <small>
+        <%= link_to 'Delete', project_path(project),
+          method: :delete,
+          confirm: 'Are you sure you want to remove this project and all its finding aids?' %>
+      </small>
+    </h2>
   </div>
   <div class="panel-body">
     <div class="finding-aids">
       <h3>Finding Aids</h3>
       <ul>
         <% project.finding_aids.order(:created_at).each do |finding_aid| %>
-          <li><%= link_to finding_aid.name, edit_finding_aid_path(finding_aid) %></li>
+          <li>
+          <%= link_to finding_aid.name, edit_finding_aid_path(finding_aid) %>
+          <%= link_to finding_aid_path(finding_aid),
+            method: :delete,
+            confirm: 'Are you sure you want to remove this finding aid?' do %>
+            <span class="remove glyphicon glyphicon-remove"></span>
+          <% end %>
+          </li>
       <% end %>
       </ul>
       <div class="center-block">

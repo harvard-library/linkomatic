@@ -3,8 +3,8 @@ class FindingAid < ActiveRecord::Base
   require 'open-uri'
   belongs_to :owner, class_name: 'User'
   belongs_to :project
-  belongs_to :setting
-  has_many :components
+  belongs_to :setting, dependent: :destroy
+  has_many :components, dependent: :destroy
   has_many :digitizations, through: :components
 
   serialize :urn_fetch_jobs, Hash
