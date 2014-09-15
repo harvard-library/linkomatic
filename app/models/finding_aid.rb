@@ -9,6 +9,8 @@ class FindingAid < ActiveRecord::Base
 
   serialize :urn_fetch_jobs, Hash
 
+  before_validation :owner_code_from_url, if: 'owner_code.empty?'
+
   validates :owner_code, presence: true
   validates :url, presence: true, unless: 'uploaded_ead.present?'
   validates :uploaded_ead, presence: true, unless: :url
@@ -86,7 +88,6 @@ class FindingAid < ActiveRecord::Base
 
   def authpath
     self.owner_code
-    #PERSISTENT_URL_PATTERN.match(url)['authpath']
   end
 
   def csv_url
@@ -135,6 +136,11 @@ class FindingAid < ActiveRecord::Base
   end
 
   private
+
+  def owner_code_from_url
+    match = PERSISTENT_URL_PATTERN.match(url)
+    self.owner_code = match['authpath'] if match
+  end
 
   def get_local_schema(doc)
     schema_url = doc.at('ead').attributes['noNamespaceSchemaLocation'].content

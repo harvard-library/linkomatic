@@ -1,23 +1,8 @@
 <%= form_for (@project ? [@project, @finding_aid] : @finding_aid) do |f| %>
   <%= f.error_messages %>
-  <div class="form-group">
-    <%= f.label :owner_code, 'Owner Code' %>
-    <%= f.text_field :owner_code, class: 'form-control' %>
-    <span class="help-block">
-      What is the owner code for this finding aid?
-    </span>
-  </div>
-  <div class="form-group">
-    <%= label @finding_aid, :name %>
-    <%= f.text_field :name, class: 'form-control' %>
-    <% if params[:action] == 'new' %>
-      <span class="help-block">
-        Leave name blank to have it pulled from the finding aid.
-      </span>
-    <% end %>
-  </div>
+
   <div class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title">Source</h3></div>
+    <div class="panel-heading"><h3 class="panel-title">EAD Source</h3></div>
     <div class="panel-body">
       <div class="form-group">
         <%= label @finding_aid, :url, 'URL' %>
@@ -35,6 +20,23 @@
         </span>
       </div>
     </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :owner_code, 'Owner Code' %>
+    <%= f.text_field :owner_code, class: 'form-control' %>
+    <span class="help-block">
+      What is the owner code for this finding aid? Leave this blank if you want it to be pulled from the URL.
+    </span>
+  </div>
+  <div class="form-group">
+    <%= label @finding_aid, :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+    <% if params[:action] == 'new' %>
+      <span class="help-block">
+        Leave name blank to have it pulled from the finding aid.
+      </span>
+    <% end %>
   </div>
 
   <%= f.submit class: 'btn btn-primary' %>
