@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
     self.projects.build(name: 'Default Project')
     self.create_setting(
       link_text: 'Click here for digital copy',
-      thumbnails: false
+      template: Template.find_by_name('Without Thumbnail')
     )
   end
 

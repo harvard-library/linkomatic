@@ -2,13 +2,18 @@
   <%= f.label :link_text %>
   <%= f.text_field :link_text, class: 'form-control' %>
 </div>
-<div class="checkbox">
-  <%= f.label :thumbnails do %>
-    <%= f.check_box :thumbnails %>
-    Thumbnails
-  <% end %>
+<div class="form-group">
+  <%= f.label :template_id, 'EAD Template' %>
+  <%= f.collection_select(
+    :template_id,
+    ::Template.all,
+    :id,
+    :name,
+    { prompt: 'Select a template...'},
+    { class: 'form-control' }) %>
 </div>
 <div class="form-group">
-  <%= f.label :thumbnail_url %>
+  <%= f.label :thumbnail_url, 'Thumbnail URL' %>
   <%= f.url_field :thumbnail_url, class: 'form-control' %>
 </div>
+

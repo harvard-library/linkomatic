@@ -1,4 +1,5 @@
 <%= form_for (@project ? [@project, @finding_aid] : @finding_aid) do |f| %>
+  <%= f.error_messages %>
   <div class="form-group">
     <%= f.label :owner_code, 'Owner Code' %>
     <%= f.text_field :owner_code, class: 'form-control' %>

@@ -1,5 +1,7 @@
 class Setting < ActiveRecord::Base
 
+  belongs_to :template
+
   HARDCODED_ATTRIBUTES = ['id', 'updated_at', 'created_at']
 
   def to_h

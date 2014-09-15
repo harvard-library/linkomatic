@@ -8,6 +8,11 @@ class FindingAid < ActiveRecord::Base
   has_many :digitizations, through: :components
 
   serialize :urn_fetch_jobs, Hash
+
+  validates :owner_code, presence: true
+  validates :url, presence: true, unless: 'uploaded_ead.present?'
+  validates :uploaded_ead, presence: true, unless: :url
+
   has_attached_file :uploaded_ead, default_url: nil
   validates_attachment_content_type :uploaded_ead, :content_type => /\Atext\/xml\Z/
 

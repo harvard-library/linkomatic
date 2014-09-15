@@ -7,7 +7,7 @@ module FindingAidsHelper
       component_did = doc.at("##{c.cid} did")
       c.digitizations.each do |d|
         next unless d.urn
-        component_did << render(partial: 'digitizations/show.ead.erb', locals: { digitization: d })
+        component_did << render(inline: d.template.subbed_template, locals: { digitization: d })
       end
     end
     doc

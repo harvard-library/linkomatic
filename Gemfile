@@ -61,3 +61,6 @@ gem 'nokogiri'
 gem 'ruby-prof'
 
 gem "paperclip", "~> 4.2"
+
+# For form errors
+gem 'dynamic_form'

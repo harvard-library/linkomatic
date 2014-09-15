@@ -17,4 +17,8 @@ module Settings
     return setting.to_h unless parent
     parent.settings.merge(self.setting.to_h)
   end
+
+  def template
+    Template.find(settings['template_id'])
+  end
 end

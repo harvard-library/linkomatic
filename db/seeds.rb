@@ -9,21 +9,25 @@
 Template.create([
   {
     name: 'Without Thumbnail',
-    body: %q|<dao xmlns:xlink="http://www.w3.org/1999/xlink" linktype="simple" xlink:actuate="onRequest" xlink:show="new" href="{{ url }}">
+    body: %q|<dao xlink:actuate="onRequest" xlink:href="{{ url }}" xlink:show="new" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink">
   <daodesc>
-    <p>{{ link_text }}</p>
+      <p>{{ link_text }}</p>
   </daodesc>
 </dao>|,
     public: true
   },
   {
     name: 'With Thumbnail',
-    body: %q|<daogrp linktype="extended">
-  <resource xmlns:xlink="http://www.w3.org/1999/xlink" linktype="resource" xlink:label="start"/>
-  <daoloc xmlns:xlink="http://www.w3.org/1999/xlink" linktype="locator" xlink:label="resource-1" href="{{ thumbnail_url }}"/>
-  <arc xmlns:xlink="http://www.w3.org/1999/xlink" linktype="arc" xlink:actuate="onLoad" xlink:from="start" xlink:show="embed" xlink:to="resource-1"/>
-  <daoloc xmlns:xlink="http://www.w3.org/1999/xlink" linktype="locator" xlink:label="resource-2" href="{{ url }}"/>
-  <arc xmlns:xlink="http://www.w3.org/1999/xlink" linktype="arc" xlink:from="start" xlink:show="new" xlink:to="resource-2"/>
+    body: %q|<daogrp xlink:type="extended" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <resource xlink:label="start" xlink:type="resource"/>
+  <daoloc xlink:href="{{ thumbnail_url }}" xlink:label="resource-1" xlink:type="locator"/>
+  <arc xlink:from="start" xlink:show="embed" xlink:to="resource-1" xlink:type="arc"/>
+  <daoloc xlink:href="{{ url }}" xlink:label="resource-2" xlink:type="locator">
+    <daodesc>
+      <p>{{ link_text }}</p>
+    </daodesc>
+  </daoloc>
+  <arc xlink:from="start" xlink:show="new" xlink:to="resource-2" xlink:type="arc"/>
 </daogrp>|,
     public: true
   }

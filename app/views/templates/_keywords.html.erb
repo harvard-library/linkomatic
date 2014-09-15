@@ -1,0 +1,9 @@
+<div>
+  <h3>Replaced Keywords</h3>
+  <dl class="dl-horizontal">
+    <% ::Template::KEYWORDS.each do |keyword, data| %>
+      <dt><%= keyword %></dt>
+      <dd><%= data[:desc] %></dd>
+    <% end %>
+  </dl>
+</div>

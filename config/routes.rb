@@ -1,6 +1,7 @@
 LinkOMatic::Application.routes.draw do
   devise_for :users
   resources :settings
+  resources :templates, only: [:index, :new, :create, :edit, :update]
   resources :users, only: [] do
     resources :settings
   end
