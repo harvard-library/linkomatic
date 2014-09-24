@@ -9,7 +9,7 @@ class FindingAidsController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.xml
+      format.xml { response.headers['Content-Disposition'] = 'attachment' }
     end
   end
 
