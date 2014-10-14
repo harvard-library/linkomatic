@@ -9,7 +9,9 @@ class FindingAidsController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.xml { response.headers['Content-Disposition'] = 'attachment' }
+      format.xml do
+        response.headers['Content-Disposition'] = "attachment; filename=#{@finding_aid.uploaded_ead_file_name}"
+      end
     end
   end
 
