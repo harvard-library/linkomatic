@@ -1,7 +1,10 @@
-<h2 class="text-danger">Errors</h2>
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-4">
+      <h2 class="text-danger">Errors</h2>
+      <% if @errors.empty? %>
+        <p><strong>Congrats, no validation errors found!</strong></p>
+      <% else %>
       <ul class="ead-errors list-unstyled">
         <% @errors.each do |error| %>
           <li class="text-danger">
@@ -9,8 +12,10 @@
           </li>
         <% end %>
       </ul>
+      <% end %>
     </div>
     <div class="col-md-8">
+      <h2>Current EAD</h2>
       <pre class="ead"><%= finding_aid_xml_with_line_nums(@finding_aid) %></pre>
     </div>
   </div>
