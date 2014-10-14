@@ -1,6 +1,7 @@
 <dl class="well setting dl-horizontal">
   <dt>Link Text:</dt><dd>&quot;<%= setting['link_text'] %>&quot;</dd>
   <dt>EAD Template:</dt><dd><%= ::Template.find(setting['template_id']).name %></dd>
+  <dt>Owner code:</dt><dd><%= setting['owner_code'] %></dd>
   <dt>Default Thumbnail:</dt>
   <dd>
   <%= setting['thumbnail_url'] ? image_tag(setting['thumbnail_url']) : 'None' %>

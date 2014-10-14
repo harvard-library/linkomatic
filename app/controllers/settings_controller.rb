@@ -34,6 +34,6 @@ class SettingsController < ApplicationController
   end
 
   def setting_params
-    params.require(:setting).permit(:link_text, :template_id, :thumbnail_url)
+    params.require(:setting).permit(:link_text, :template_id, :owner_code, :thumbnail_url)
   end
 end

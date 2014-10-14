@@ -4,6 +4,7 @@ class CreateSettings < ActiveRecord::Migration
       t.string :link_text
       t.references :template
       t.string :thumbnail_url
+      t.string :owner_code
 
       t.timestamps
     end

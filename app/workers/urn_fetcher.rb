@@ -10,7 +10,7 @@ class URNFetcher
   def perform(finding_aid_id, component_id, i, total_components)
     finding_aid = FindingAid.find(finding_aid_id)
     component = finding_aid.components.find_by_cid(component_id)
-    url = URI.encode(URL.sub('{component_id}', component_id).sub('{authpath}', finding_aid.authpath))
+    url = URI.encode(URL.sub('{component_id}', component_id).sub('{authpath}', component.settings['owner_code']))
     logger.info "Fetching: #{url}"
     urns = URI.parse(url).read
 

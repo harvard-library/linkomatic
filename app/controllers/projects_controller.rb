@@ -47,6 +47,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name, setting_attributes: [ :link_text, :thumbnails, :thumbnail_url ])
+    params.require(:project).permit(:name, setting_attributes: [ :link_text, :template_id, :owner_code, :thumbnail_url ])
   end
 end

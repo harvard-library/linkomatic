@@ -23,11 +23,13 @@
   </div>
 
   <div class="form-group">
-    <%= f.label :owner_code, 'Owner Code' %>
-    <%= f.text_field :owner_code, class: 'form-control' %>
-    <span class="help-block">
-      What is the owner code for this finding aid? Leave this blank if you want it to be pulled from the URL.
-    </span>
+    <%= f.fields_for :setting_attributes, @finding_aid.setting do |setting_f| %>
+      <%= setting_f.label :owner_code, 'Owner Code' %>
+      <%= setting_f.text_field :owner_code, class: 'form-control' %>
+      <span class="help-block">
+        What is the owner code for this finding aid? Leave this blank if you want it to be pulled from the URL.
+      </span>
+    <% end %>
   </div>
   <div class="form-group">
     <%= label @finding_aid, :name %>

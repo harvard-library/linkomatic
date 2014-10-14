@@ -20,6 +20,9 @@ class FindingAidsController < ApplicationController
 
   def new
     @finding_aid = FindingAid.new
+    if @project.settings['owner_code']
+      @finding_aid.build_setting(owner_code: @project.settings['owner_code'])
+    end
   end
 
   def create
@@ -77,6 +80,6 @@ class FindingAidsController < ApplicationController
   end
 
   def finding_aid_params
-    params.require(:finding_aid).permit(:name, :url, :uploaded_ead, :owner_code)
+    params.require(:finding_aid).permit(:name, :url, :uploaded_ead, setting_attributes: [ :link_text, :template_id, :owner_code, :thumbnail_url ])
   end
 end

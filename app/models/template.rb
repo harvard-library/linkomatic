@@ -12,6 +12,10 @@ class Template < ActiveRecord::Base
     'thumbnail_url' => {
         replacement: 'digitization.settings["thumbnail_url"]',
         desc: 'The URL to the thumbnail of the component'
+    },
+    'owner_code' => {
+        replacement: 'digitization.settings["owner_code"]',
+        desc: 'The owner code of the component'
     }
   }
 

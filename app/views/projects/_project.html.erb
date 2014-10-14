@@ -4,7 +4,7 @@
       <small>
         <%= link_to 'Delete', project_path(project),
           method: :delete,
-          confirm: 'Are you sure you want to remove this project and all its finding aids?' %>
+          data: { confirm: 'Are you sure you want to remove this project and all its finding aids?' } %>
       </small>
     </h2>
   </div>
@@ -17,7 +17,7 @@
           <%= link_to finding_aid.name, edit_finding_aid_path(finding_aid) %>
           <%= link_to finding_aid_path(finding_aid),
             method: :delete,
-            confirm: 'Are you sure you want to remove this finding aid?' do %>
+            data: { confirm: 'Are you sure you want to remove this finding aid?' } do %>
             <span class="remove glyphicon glyphicon-remove"></span>
           <% end %>
           </li>

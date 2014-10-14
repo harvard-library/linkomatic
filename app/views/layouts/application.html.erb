@@ -21,6 +21,11 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+        <% if user_signed_in? %>
+          <li class="<%= (controller_name == 'projects' && action_name == 'index') ? 'active' : '' %>">
+            <%= link_to "My Projects", projects_path %>
+          </li>
+        <% end %>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>

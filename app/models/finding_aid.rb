@@ -9,7 +9,7 @@ class FindingAid < ActiveRecord::Base
 
   serialize :urn_fetch_jobs, Hash
 
-  before_validation :owner_code_from_url, if: 'owner_code.empty?'
+  before_validation :owner_code_from_url, if: Proc.new { |f| f.owner_code.nil? || f.owner_code.empty? }
 
   validates :owner_code, presence: true
   validates :url, presence: true, unless: 'uploaded_ead.present?'
@@ -23,6 +23,8 @@ class FindingAid < ActiveRecord::Base
 
   after_save :set_name, if: 'uploaded_ead.present? && name.blank?'
   after_save :create_components!, if: 'uploaded_ead.present? && components.empty?'
+
+  accepts_nested_attributes_for :setting
 
   LIBRARY_NAME_SERVER = 'http://nrs.harvard.edu/'
   EAD_URL_PATTERN = 'http://oasis.lib.harvard.edu/oasis/ead2002/dtd/{name}'
@@ -82,6 +84,10 @@ class FindingAid < ActiveRecord::Base
     Nokogiri::XML(ead_string)
   end
 
+  def owner_code
+    self.settings['owner_code']
+  end
+
   def library_id
     PERSISTENT_URL_PATTERN.match(url)['name']
   end
@@ -139,7 +145,7 @@ class FindingAid < ActiveRecord::Base
 
   def owner_code_from_url
     match = PERSISTENT_URL_PATTERN.match(url)
-    self.owner_code = match['authpath'] if match
+    self.setting.owner_code = match['authpath'] if match
   end
 
   def get_local_schema(doc)
