@@ -27,7 +27,7 @@ class FindingAidsController < ApplicationController
       @finding_aid = current_user.projects.first.finding_aids.build(finding_aid_params)
     end
     if @finding_aid.save
-      redirect_to edit_finding_aid_path(@finding_aid), notice: 'Finding aid successfully created'
+      redirect_to edit_finding_aid_path(@finding_aid), notice: 'Finding aid successfully loaded'
     else
       render 'finding_aids/new'
     end
