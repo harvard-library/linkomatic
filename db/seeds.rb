@@ -9,7 +9,7 @@
 Template.create([
   {
     name: 'Without Thumbnail',
-    body: %q|<dao xlink:actuate="onRequest" xlink:href="{{ url }}" xlink:show="new" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink">
+    body: %q|<dao xlink:actuate="onRequest" xlink:href="{{ url }}?buttons=y" xlink:show="new" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink">
   <daodesc>
       <p>{{ link_text }}</p>
   </daodesc>
@@ -20,9 +20,9 @@ Template.create([
     name: 'With Thumbnail',
     body: %q|<daogrp xlink:type="extended" xmlns:xlink="http://www.w3.org/1999/xlink">
   <resource xlink:label="start" xlink:type="resource"/>
-  <daoloc xlink:href="{{ thumbnail_url }}" xlink:label="resource-1" xlink:type="locator"/>
+  <daoloc xlink:href="{{ thumbnail_url }}?buttons=y" xlink:label="resource-1" xlink:type="locator"/>
   <arc xlink:from="start" xlink:show="embed" xlink:to="resource-1" xlink:type="arc"/>
-  <daoloc xlink:href="{{ url }}" xlink:label="resource-2" xlink:type="locator">
+  <daoloc xlink:href="{{ url }}?buttons=y" xlink:label="resource-2" xlink:type="locator">
     <daodesc>
       <p>{{ link_text }}</p>
     </daodesc>
