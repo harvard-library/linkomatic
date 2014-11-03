@@ -7,7 +7,7 @@
   <p>To get started, check out the example finding aid we&apos;ve added for you below or process a new finding aid.</p>
 </div>
 
-<h1 class="project-title">My Projects <small><%= link_to 'Create New Project', new_project_path %></small></h1>
+<h1 class="project-title">Projects <small><%= link_to 'Create New Project', new_project_path %></small></h1>
 <% current_user.projects.order(:created_at).each do |project| %>
   <%= render partial: 'projects/project', object: project %>
 <% end %>
