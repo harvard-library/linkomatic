@@ -49,6 +49,10 @@ Setup
   * Again, if you're using Apache, you'll need to run `rake websocket_rails:start_server`
 * Start sidekiq workers
   * `sidekiq --daemon --concurrency 10 --logfile tmp/sidekiq.log`
+* Update the devise configs
+  * Use `rake secret` to generate a new secret key and add it to
+    `config/initializers/devise.rb`
+  * Update the `config.mailer_sender` in `config/initializers/devise.rb`
 * Create an admin user
   * Sign up for an account
   * Use the console (`rails c`) to set the admin attribute on that user, e.g.
