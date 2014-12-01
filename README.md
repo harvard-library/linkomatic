@@ -15,8 +15,7 @@ The code lives in the Berkman Center's [GitHub repo](https://github.com/berkmanc
 User Documentation
 ------------------
 
-We're in the process of finalizing user documentation, but once it's up this
-will get updated with a pointer to it.
+User documentation exists in the `doc` folder.
 
 Requirements
 ------------
