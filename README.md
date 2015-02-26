@@ -4,7 +4,7 @@ Link-o-matic
 Description
 -----------
 
-This is a project to help automate the insertion of links to digitized records into 
+This is a project to help automate the insertion of links to digitized records into
 EAD finding aids.
 
 Code Repository
@@ -48,9 +48,13 @@ Setup
   * Again, if you're using Apache, you'll need to run `rake websocket_rails:start_server`
 * Start sidekiq workers
   * `sidekiq --daemon --concurrency 10 --logfile tmp/sidekiq.log`
+  * In production systems, create a `.env` file for your environment.  Currently, the following variables are needed to run Link-o-matic:
+
+    ```
+    SECRET_KEY_BASE=ThirtyPlusCharStringOfRandomnessFromRakeSecretMaybe
+    DEVISE_SECRET_KEY=anotherThirtyPlusCharsOfRandomness
+    ```
 * Update the devise configs
-  * Use `rake secret` to generate a new secret key and add it to
-    `config/initializers/devise.rb`
   * Update the `config.mailer_sender` in `config/initializers/devise.rb`
 * Create an admin user
   * Sign up for an account

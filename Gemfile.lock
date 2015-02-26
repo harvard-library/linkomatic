@@ -52,6 +52,9 @@ GEM
       railties (>= 3.2.6, < 5)
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    dotenv (1.0.2)
+    dotenv-deployment (0.2.0)
+      dotenv (~> 1.0)
     dynamic_form (1.1.4)
     em-synchrony (1.0.3)
       eventmachine (>= 1.0.0.beta.1)
@@ -193,6 +196,7 @@ DEPENDENCIES
   acts_as_list
   coffee-rails (~> 4.0.0)
   devise
+  dotenv-deployment
   dynamic_form
   jbuilder (~> 1.2)
   jquery-rails

@@ -9,4 +9,8 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-LinkOMatic::Application.config.secret_key_base = '118c68411a5c8f01f29ed3787f1b32f85b343dec57054e45a4fbf80783cc986de652ea632393ab9e9f2a97c53c6f1e42ce20f74ca119848c9cba7fb54591ce2e'
+LinkOMatic::Application.config.secret_key_base = if Rails.env.development? or Rails.env.test?
+                                                   ('x' * 30)
+                                                 else
+                                                   ENV['SECRET_TOKEN']
+                                                 end
