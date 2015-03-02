@@ -33,7 +33,7 @@ class URNFetcher
                  res.body
                # Attempt 2: PDS, but malformed(Quality NA, '-METS' suffix)
                elsif (res = Net::HTTP.get_response(oid_url("#{component_id}-METS", authpath, "NA"))).code == "200"
-                 logger.info "Attempt 2: #{oid_url(component_id + '-mets', authpath, "NA")}"
+                 logger.info "Attempt 2: #{oid_url(component_id + '-METS', authpath, "NA")}"
                  res.body
                # Attempt 3: Deliverable(Quality 5)
                elsif (res = Net::HTTP.get_response(oid_url(component_id, authpath, "5"))).code == "200"
@@ -41,22 +41,18 @@ class URNFetcher
                  res.body
                else
                  logger.info "Failure: NO URN FOR C_ID: #{component_id} and ownerCode: #{authpath}"
-                 nil
+                 ""
                end
-    if oid_html && (oid_idx = oid_html.index("Oracle ID: "))
-      oid_html[(oid_idx + 11)..-1]
-    else
-      nil
-    end
+    oid_html.match(/(?<=Oracle ID: ).+?(?=<br>)/)
   end
 
   # Fetches URNs. Returns array of URNs (can be empty)
   def get_urns(oid)
-    logger.info "Fetch URNs for #{oid}"
+    logger.info "Fetch URNs for #{oid} at #{urns_url(oid)}"
     if (res = Net::HTTP.get_response(urns_url(oid))).code == "200"
-      if (urns = res.body.match(/(?<=URN: ).+(?=<br>)/))
+      if (urns = res.body.match(/(?<=URN: ).+?(?=<br>)/))
         logger.info "URNs returned: #{urns}"
-        urns.split(',')
+        urns.to_s.split(',')
       else
         []
       end
