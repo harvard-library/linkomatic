@@ -10,15 +10,20 @@ class URNFetcher
   ##################################################
   # Url parts and helpers                          #
   ##################################################
-  BASE_OLIVIA = "http://olivia.lib.harvard.edu:9016/olivia/servlet/OliviaServlet?"
-  OID_QUERY = "storedProcedure=getOracleID&callingApplication=OASIS&role=NA&purpose=NA&"
+  OLIVIA = URI("http://olivia.lib.harvard.edu:9016/olivia/servlet/OliviaServlet")
+  OID_Q_BASE = {"storedProcedure" => "getOracleID",
+               "callingApplication" => "OASIS",
+               "role" => "NA",
+               "purpose" => "NA"}
 
-  def oid_url(component_id, authpath, quality)
-    URI(URI.encode(BASE_OLIVIA + OID_QUERY + "ownerCode=#{authpath}&quality=#{quality}&localName=#{component_id}"))
+  def oid_path(component_id, authpath, quality = "NA")
+    OLIVIA.request_uri + '?' + URI.encode_www_form(OID_Q_BASE.merge("ownerCode" => "#{authpath}",
+                                                                    "quality" => "#{quality}",
+                                                                    "localName" => "#{component_id}"))
   end
 
   def urns_url(oid)
-    URI(URI.encode(BASE_OLIVIA + "storedProcedure=getURN&oracleID=#{oid}"))
+    URI(OLIVIA + URI.encode("storedProcedure=getURN&oracleID=#{oid}"))
   end
 
   ##################################################
@@ -27,23 +32,29 @@ class URNFetcher
 
   # Fetch OID. Returns OID or nil
   def get_oid(component_id, authpath)
+    http = Net::HTTP.new(OLIVIA.host, OLIVIA.port)
+    http.read_timeout = 120
+
     # Attempt 1: PDS(Quality NA)
-    oid_html = if (res = Net::HTTP.get_response(oid_url(component_id, authpath, "NA"))).code == "200"
-                 logger.info "Attempt 1: #{oid_url(component_id, authpath, "NA")}"
+    oid_html = if (res = http.request(Net::HTTP::Get.new(oid_path(component_id, authpath)))).code == "200"
+                 logger.info "Attempt 1: #{oid_path(component_id, authpath, "NA")}"
                  res.body
                # Attempt 2: PDS, but malformed(Quality NA, '-METS' suffix)
-               elsif (res = Net::HTTP.get_response(oid_url("#{component_id}-METS", authpath, "NA"))).code == "200"
-                 logger.info "Attempt 2: #{oid_url(component_id + '-METS', authpath, "NA")}"
+               elsif (res = http.request(Net::HTTP::Get.new(oid_path("#{component_id}-METS", authpath)))).code == "200"
+                 logger.info "Attempt 2: #{oid_path(component_id + '-METS', authpath, "NA")}"
                  res.body
                # Attempt 3: Deliverable(Quality 5)
-               elsif (res = Net::HTTP.get_response(oid_url(component_id, authpath, "5"))).code == "200"
-                 logger.info "Attempt 3: #{oid_url(component_id, authpath, "5")}"
+               elsif (res = http.request(Net::HTTP::Get.new(oid_path(component_id, authpath, "5")))).code == "200"
+                 logger.info "Attempt 3: #{oid_path(component_id, authpath, "5")}"
                  res.body
                else
                  logger.info "Failure: NO URN FOR C_ID: #{component_id} and ownerCode: #{authpath}"
                  ""
                end
     oid_html.match(/(?<=Oracle ID: ).+?(?=<br>)/)
+  rescue Timeout::Error
+    logger.info "Timeout error in get_oid"
+    nil
   end
 
   # Fetches URNs. Returns array of URNs (can be empty)
