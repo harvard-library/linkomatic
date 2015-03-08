@@ -21,11 +21,11 @@ namespace :deploy do
         if test("[ -f #{release_path}/tmp/pids/websocket_rails.pid ]")
           execute :rake, "websocket_rails:stop_server #{postamble}"
         end
-        execute :sidekiqctl, "stop #{release_path}/tmp/pids/sidekiq.pid"
 
-        # Restart WSR and sidekiq workers
-        execute :rake, "websocket_rails:start_server#{postamble}"
-        execute :sidekiq, "--daemon --concurrency #{->(){ fetch(:sidekiq_workers) }.call} --logfile #{release_path}/log/sidekiq.log -P #{release_path}/tmp/pids/sidekiq.pid"
+        ###invoke('sidekiq:restart')
+
+        # Restart WSR
+        execute :rake, "websocket_rails:start_server #{postamble}"
 
         # Actually restart application
         execute :touch, release_path.join('tmp/restart.txt')
