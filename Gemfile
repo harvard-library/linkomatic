@@ -40,7 +40,7 @@ gem 'unicorn', group: :development
 group :development do
   gem 'capistrano', '~> 3.1.0'
   gem 'capistrano-rails', '~> 1.0.0'
-  gem 'capistrano-rvm', '~> 0.0.1'
+  gem 'capistrano-rvm', '~> 0.1.1'
   gem 'capistrano-bundler', '~> 1.1.3'
 end
 
