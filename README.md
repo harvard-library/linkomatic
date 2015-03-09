@@ -53,6 +53,7 @@ Setup
     ```
     SECRET_TOKEN=ThirtyPlusCharStringOfRandomnessFromRakeSecretMaybe
     DEVISE_SECRET_KEY=anotherThirtyPlusCharsOfRandomness
+    REDIS_URL=redis://:password@localhost:6379/12 # Only needed if requirespassword
     ```
 * Update the devise configs
   * Update the `config.mailer_sender` in `config/initializers/devise.rb`
