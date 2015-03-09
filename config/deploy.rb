@@ -11,8 +11,10 @@ ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 set :deploy_via, :copy
 
+set :bundle_binstubs, nil
+
 set :linked_files, %w{config/database.yml .env config/initializers/websocket_rails.rb}
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 set :keep_releases, 3
 
