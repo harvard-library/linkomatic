@@ -1,4 +1,4 @@
 LinkOMatic::Application.configure do
-  config.host = 'localhost'
-  config.port = '3000'
+  config.host = ROOT_URL
+  config.port = '8080'
 end

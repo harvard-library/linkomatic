@@ -51,6 +51,7 @@ Setup
   * In production systems, create a `.env` file for your environment.  Currently, the following variables are needed to run Link-o-matic:
 
     ```
+    ROOT_URL=mybaseurl.com # Note: If not present, defaults to result of Socket.gethostname
     SECRET_TOKEN=ThirtyPlusCharStringOfRandomnessFromRakeSecretMaybe
     DEVISE_SECRET_KEY=anotherThirtyPlusCharsOfRandomness
     REDIS_URL=redis://:password@localhost:6379/12 # Only needed if requirespassword

@@ -27,8 +27,8 @@ LinkOMatic::Application.configure do
   # number of complex assets.
   config.assets.debug = false
 
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => "#{ROOT_URL}:3000" }
 
   config.middleware.delete Rack::Lock
-  config.websocket_url = 'localhost:3000/websocket'
+  config.websocket_url = "#{ROOT_URL}:3000/websocket"
 end
