@@ -51,7 +51,7 @@ Setup
   * In production systems, create a `.env` file for your environment.  Currently, the following variables are needed to run Link-o-matic:
 
     ```
-    SECRET_KEY_BASE=ThirtyPlusCharStringOfRandomnessFromRakeSecretMaybe
+    SECRET_TOKEN=ThirtyPlusCharStringOfRandomnessFromRakeSecretMaybe
     DEVISE_SECRET_KEY=anotherThirtyPlusCharsOfRandomness
     ```
 * Update the devise configs

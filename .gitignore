@@ -7,6 +7,10 @@
 # Ignore bundler config.
 /.bundle
 
+# Various cappy things
+/.capistrano
+/config/deploy/*.rb
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -15,4 +19,10 @@
 /log/*.log
 /tmp
 
+# Ignore redis shutdown dumps
+/dump\.rdb
+
+# FindingAids
+/public/system/finding_aids
 /config/database.yml
+/config/initializers/websocket_rails.rb
