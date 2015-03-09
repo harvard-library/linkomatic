@@ -23,7 +23,7 @@ class URNFetcher
   end
 
   def urns_url(oid)
-    URI(OLIVIA + URI.encode("storedProcedure=getURN&oracleID=#{oid}"))
+    URI(OLIVIA.request_uri + '?' + URI.encode("storedProcedure=getURN&oracleID=#{oid}"))
   end
 
   ##################################################
@@ -59,8 +59,11 @@ class URNFetcher
 
   # Fetches URNs. Returns array of URNs (can be empty)
   def get_urns(oid)
+    http = Net::HTTP.new(OLIVIA.host, OLIVIA.port)
+    http.read_timeout = 120
+
     logger.info "Fetch URNs for #{oid} at #{urns_url(oid)}"
-    if (res = Net::HTTP.get_response(urns_url(oid))).code == "200"
+    if (res = http.request(Net::HTTP::Get.new(urns_url(oid)))).code == "200"
       if (urns = res.body.match(/(?<=URN: ).+?(?=<br>)/))
         logger.info "URNs returned: #{urns}"
         urns.to_s.split(',')
