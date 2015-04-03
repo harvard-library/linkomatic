@@ -20,10 +20,11 @@ class ApplicationController < ActionController::Base
   def configure_devise_permitted_parameters
     devise_parameter_sanitizer.for(:account_update) do |u|
       u.permit(
+        :email,
         :password,
         :current_password,
         :password_confirmation,
-        setting_attributes: [ :link_text, :thumbnails, :thumbnail_url ]
+        setting_attributes: [ :link_text, :template_id, :owner_code, :thumbnail_url ]
       )
     end
   end
