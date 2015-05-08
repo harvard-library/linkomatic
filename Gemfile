@@ -36,6 +36,8 @@ end
 # Use unicorn as the app server
 gem 'unicorn', group: :development
 
+gem 'pry-remote'
+
 # Use Capistrano for deployment
 group :development do
   gem 'capistrano', '~> 3.1.0'
