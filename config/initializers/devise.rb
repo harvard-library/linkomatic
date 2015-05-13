@@ -99,7 +99,18 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 10
 
   # Setup a pepper to generate the encrypted password.
-  # config.pepper = '8f1e3387241f8864f2976c79cbf47041ea35678b43468f51b1888b8f6b46b8fe202bf8ed11b53439647d477f797c6fb53bafdb9ac9d1328e058ee95434a004e7'
+  # Pepper is of notional value at best to cryptographic security
+  #   of password - included solely because of issue where production
+  #   logins with !s in the password fail without a pepper.
+  # THIS IS MAGICAL THINKING AS DEBUG, INVESTIGATE ASAP
+  # Ref: https://github.com/plataformatec/devise/issues/3565
+  # For debug assistance with login issues, refer to:
+  #   http://www.thingsrails.com/2013/05/determine-the-login-failure-for-devise
+  config.pepper = if Rails.env.development? or Rails.env.test?
+                    ('x' * 128)
+                  else
+                    ENV['DEVISE_PEPPER'] or raise "Application requires DEVISE_PEPPER env variable to function"
+                  end
 
   # ==> Configuration for :confirmable
   # A period that the user is allowed to access the website even without

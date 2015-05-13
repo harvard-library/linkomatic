@@ -10,7 +10,7 @@ EAD finding aids.
 Code Repository
 ---------------
 
-The code lives in the Berkman Center's [GitHub repo](https://github.com/berkmancenter/linkomatic).
+[GitHub repo](https://github.com/harvard-library/linkomatic).
 
 User Documentation
 ------------------
@@ -33,7 +33,7 @@ Setup
 
 * Install requirements (see above)
 * Checkout the code
-  * `git clone https://github.com/berkmancenter/linkomatic`
+  * `git clone https://github.com/harvard-library/linkomatic`
   * `cd linkomatic`
 * Install libraries
   * `bundle install`
@@ -54,25 +54,27 @@ Setup
     ROOT_URL=mybaseurl.com # Note: If not present, defaults to result of Socket.gethostname
     SECRET_TOKEN=ThirtyPlusCharStringOfRandomnessFromRakeSecretMaybe
     DEVISE_SECRET_KEY=anotherThirtyPlusCharsOfRandomness
+    DEVISE_PEPPER=moreRandomnessGoesHere # Currently needed on production due to [devise issue](https://github.com/plataformatec/devise/issues/3565)
     REDIS_URL=redis://:password@localhost:6379/12 # Only needed if requirespassword
     ```
 * Update the devise configs
   * Update the `config.mailer_sender` in `config/initializers/devise.rb`
-* Create an admin user
+* Stand up the application. In development, `rails s` works fine
+* Create an admin user via the application's web interface
   * Sign up for an account
   * Use the console (`rails c`) to set the admin attribute on that user, e.g.
-    `User.find(3).update_attribute('admin', true)`
+    `User.find_by(:email => 'email.you.used@host.com').update_attribute('admin', true)`
 
 Tested Configurations
 ---------------------
 
-* Phusion Passenger, Ruby 2.1.2, Apache 2.2, Ubuntu 12.04 LTS
-* Phusion Passenger, Ruby 2.1.4, Apache 2.4, Ubuntu 14.04 LTS
+* Phusion Passenger, Ruby 2.1.2, Apache 2.2
+* Phusion Passenger, Ruby 2.1.4, Apache 2.4
 
 Issue Tracker
 -------------
 
-We maintain a closed-to-the-public [issue tracker](https://cyber.law.harvard.edu/projectmanagement/projects/linkomatic). Any additional issues can be added to the [GitHub issue tracker](https://github.com/berkmancenter/linkomatic/issues).
+Any issues can be added to the [GitHub issue tracker](https://github.com/harvard-library/linkomatic/issues).
 
 Built With
 ----------
@@ -83,6 +85,8 @@ Scholarly Communication](https://osc.hul.harvard.edu), the [Berkman Center for
 Internet &amp; Society](http://cyber.law.harvard.edu) and the [Arcadia
 Fund](http://www.arcadiafund.org.uk)
 
+Additional development and ongoing support courtesy of [Library Technology Services](http://hul.harvard.edu/ois/) at Harvard University, a division of HUIT.
+
 ### Technologies
 * [Rails](http://rubyonrails.org/)
 * [Bootstrap](http://getbootstrap.com/)
@@ -91,8 +95,9 @@ Fund](http://www.arcadiafund.org.uk)
 
 Contributors
 ------------
-
 [Justin Clark](https://github.com/jdcc)
+[Bobbi Fox](https://github.com/bobbi-SMR)
+[Dave Mayo](https://github.com/pobocks) (Primary dev/contact)
 
 License
 -------
