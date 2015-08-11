@@ -95,9 +95,9 @@ Additional development and ongoing support courtesy of [Library Technology Servi
 
 Contributors
 ------------
-[Justin Clark](https://github.com/jdcc)
-[Bobbi Fox](https://github.com/bobbi-SMR)
-[Dave Mayo](https://github.com/pobocks) (Primary dev/contact)
+* [Justin Clark](https://github.com/jdcc)
+* [Bobbi Fox](https://github.com/bobbi-SMR)
+* [Dave Mayo](https://github.com/pobocks) (Primary dev/contact)
 
 License
 -------
