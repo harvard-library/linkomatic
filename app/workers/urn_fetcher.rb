@@ -10,20 +10,30 @@ class URNFetcher
   ##################################################
   # Url parts and helpers                          #
   ##################################################
-  OLIVIA = URI("http://olivia.lib.harvard.edu:9016/olivia/servlet/OliviaServlet")
-  OID_Q_BASE = {"storedProcedure" => "getOracleID",
-               "callingApplication" => "OASIS",
-               "role" => "NA",
-               "purpose" => "NA"}
 
-  def oid_path(component_id, authpath, quality = "NA")
-    OLIVIA.request_uri + '?' + URI.encode_www_form(OID_Q_BASE.merge("ownerCode" => "#{authpath}",
-                                                                    "quality" => "#{quality}",
-                                                                    "localName" => "#{component_id}"))
+  OLIVIA = URI("http://olivia.lib.harvard.edu:9016/olivia/servlet/OliviaServlet")
+  OID_Q_BASE = {storedProcedure: "getOracleID",
+                callingApplication: "OASIS"}
+  OID_Q_OPTS = {quality: "NA",
+                role: "NA",
+                purpose: "NA"}
+
+  def oid_path(component_id, authpath, opts = {})
+    query = OID_Q_BASE.merge(**OID_Q_OPTS).merge(ownerCode: "#{authpath}",
+                                                 localName: "#{component_id}").merge(**opts)
+    OLIVIA.request_uri + '?' + URI.encode_www_form(query)
   end
 
   def urns_path(oid)
     OLIVIA.request_uri + '?' + URI.encode("storedProcedure=getURN&oracleID=#{oid}")
+  end
+
+  # Helper method which returns {response, false}
+  def try_request(component_id, authpath, opts = {})
+    @attempts += 1
+    path = oid_path(component_id, authpath, **opts)
+    logger.info("Attempt #{@attempts}: #{path}")
+    (res = @http.request(Net::HTTP::Get.new(path))).code == "200" ? res : false
   end
 
   ##################################################
@@ -32,25 +42,28 @@ class URNFetcher
 
   # Fetch OID. Returns OID or nil
   def get_oid(component_id, authpath)
-    http = Net::HTTP.new(OLIVIA.host, OLIVIA.port)
-    http.read_timeout = 120
+    @http = Net::HTTP.new(OLIVIA.host, OLIVIA.port)
+    @http.read_timeout = 120
 
-    # Attempt 1: PDS(Quality NA)
-    oid_html = if (res = http.request(Net::HTTP::Get.new(oid_path(component_id, authpath)))).code == "200"
-                 logger.info "Attempt 1: #{oid_path(component_id, authpath, "NA")}"
+    # The first two attempts represent current correct practice
+    # DRS2 objects look like these, DRS1 SHOULD going forward
+    oid_html = if res = try_request(component_id, authpath,    role: "DELIVERABLE", quality: "NA")
                  res.body
-               # Attempt 2: PDS, but malformed(Quality NA, '-METS' suffix)
-               elsif (res = http.request(Net::HTTP::Get.new(oid_path("#{component_id}-METS", authpath)))).code == "200"
-                 logger.info "Attempt 2: #{oid_path(component_id + '-METS', authpath, "NA")}"
+               elsif res = try_request(component_id, authpath, role: "DELIVERABLE", quality: "5")
                  res.body
-               # Attempt 3: Deliverable(Quality 5)
-               elsif (res = http.request(Net::HTTP::Get.new(oid_path(component_id, authpath, "5")))).code == "200"
-                 logger.info "Attempt 3: #{oid_path(component_id, authpath, "5")}"
+               # The next three attempts represent common legacy practice in DRS1
+               elsif res = try_request(component_id, authpath)
+                 res.body
+               # A number of PDS records have malformed component IDs with a '-METS' suffix. ಠ_ಠ
+               elsif res = try_request("#{component_id}-METS", authpath)
+                 res.body
+               elsif res = try_request(component_id, authpath, quality: "5")
                  res.body
                else
                  logger.info "Failure: NO URN FOR C_ID: #{component_id} and ownerCode: #{authpath}"
                  ""
                end
+
     oid_html.match(/(?<=Oracle ID: ).+?(?=<br>)/)
   rescue Timeout::Error
     logger.info "Timeout error in get_oid"
@@ -79,6 +92,7 @@ class URNFetcher
   # Entry point for worker                         #
   ##################################################
   def perform(finding_aid_id, component_id, i, total_components)
+    @attempts = 0 # tracking variable used for logging in #try_request
     oid = urns = nil
     finding_aid = FindingAid.find(finding_aid_id)
     component = finding_aid.components.find_by_cid(component_id)
