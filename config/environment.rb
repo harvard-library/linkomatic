@@ -4,7 +4,7 @@ require File.expand_path('../application', __FILE__)
 # If no ROOT_URL is set, get one via socket
 require 'socket'
 ROOT_URL = ENV['ROOT_URL'] || Socket.gethostname
-Rails.config.default_url_options.host = ROOT_URL
+Rails.configuration.action_mailer.default_url_options = {host: ROOT_URL}
 
 # Initialize the Rails application.
 LinkOMatic::Application.initialize!
