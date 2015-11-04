@@ -19,8 +19,9 @@ class URNFetcher
                 purpose: "NA"}
 
   def oid_path(component_id, authpath, opts = {})
-    query = OID_Q_BASE.merge(**OID_Q_OPTS).merge(ownerCode: "#{authpath}",
-                                                 localName: "#{component_id}").merge(**opts)
+    query = OID_Q_BASE.merge(OID_Q_OPTS).merge(ownerCode: "#{authpath}",
+                                               localName: "#{component_id}").merge(opts)
+
     OLIVIA.request_uri + '?' + URI.encode_www_form(query)
   end
 
@@ -28,10 +29,19 @@ class URNFetcher
     OLIVIA.request_uri + '?' + URI.encode("storedProcedure=getURN&oracleID=#{oid}")
   end
 
+  # URN for component with URN pointing at PDS object
+  def urns2_path(component_id, authpath)
+    query = OID_Q_BASE.merge(storedProcedure: "getDrs2ObjectUrn",
+                             ownerCode: "#{authpath}",
+                             localName: "#{component_id}")
+
+    OLIVIA.request_uri + '?' + URI.encode_www_form(query)
+  end
+
   # Helper method which returns {response, false}
   def try_request(component_id, authpath, opts = {})
     @attempts += 1
-    path = oid_path(component_id, authpath, **opts)
+    path = oid_path(component_id, authpath, opts)
     logger.info("Attempt #{@attempts}: #{path}")
     (res = @http.request(Net::HTTP::Get.new(path))).code == "200" ? res : false
   end
@@ -88,6 +98,24 @@ class URNFetcher
     end
   end
 
+  # Fetches URNs for objects whose URNs point at PDS objects rather than files
+  def get_drs2_pds_urns(component_id, authpath)
+    http = Net::HTTP.new(OLIVIA.host, OLIVIA.port)
+    http.read_timeout = 120
+
+    logger.info "Fetch URNs for #{authpath}: #{component_id}"
+    if (res = http.request(Net::HTTP::Get.new(urns2_path(component_id, authpath)))).code == "200"
+      if (urns = res.body.match(/(?<=URN: ).+?(?=<br>)/))
+        logger.info "URNs returned: #{urns}"
+        urns.to_s.split(',')
+      else
+        []
+      end
+    else
+      []
+    end
+  end
+
   ##################################################
   # Entry point for worker                         #
   ##################################################
@@ -99,7 +127,9 @@ class URNFetcher
     authpath = component.settings['owner_code']
     logger.info "Fetching: #{authpath} : #{component_id}'s OID"
     if (oid = get_oid(component_id, authpath))
-      get_urns(oid).each{|urn| component.digitizations.find_or_create_by urn: urn}
+      get_urns(oid).each{|urn| component.digitizations.find_or_create_by(urn: urn) }
+    elsif not (urns = get_drs2_pds_urns(component_id, authpath)).empty?
+      urns.each{|urn| component.digitizations.find_or_create_by(urn: urn) }
     else
       component.digitizations.create(urn: nil) if component.digitizations.empty?
     end
