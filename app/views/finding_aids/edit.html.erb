@@ -75,7 +75,7 @@
   jobChannel.bind('complete', function(job) {
     // Tell the dispatcher we saw a job complete, as it can't see channels
     dispatcher.trigger('fetch_job.complete', { jid: job.jid });
-    var $row = $('#cid-' + job.component_id).parent();
+    var $row = $('td[id="cid-' + job.component_id + '"]').parent();
     var $ul = $row.find('ul');
 
     $ul.empty();
