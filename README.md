@@ -56,6 +56,7 @@ Setup
     DEVISE_SECRET_KEY=anotherThirtyPlusCharsOfRandomness
     DEVISE_PEPPER=moreRandomnessGoesHere # Currently needed on production due to [devise issue](https://github.com/plataformatec/devise/issues/3565)
     REDIS_URL=redis://:password@localhost:6379/12 # Only needed if requirespassword
+    OLIVIA_URL=http://location.of.olivia.harvard.edu:9001/olivia/servlet/OliviaServlet # If nor present, defaults to test olivia
     ```
 * Update the devise configs
   * Update the `config.mailer_sender` in `config/initializers/devise.rb`

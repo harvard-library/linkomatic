@@ -1,3 +1,4 @@
+# coding: utf-8
 # This background worker, given a component ID and an OwnerCode(authpath),
 #   fetches an Oracle ID, then uses that Oracle ID to fetch a URN for that component
 
@@ -11,7 +12,7 @@ class URNFetcher
   # Url parts and helpers                          #
   ##################################################
 
-  OLIVIA = URI("http://olivia.lib.harvard.edu:9016/olivia/servlet/OliviaServlet")
+  OLIVIA = URI("#{ENV.fetch('OLIVIA_URL', 'http://oliviatest.lib.harvard.edu:10016')}/olivia/servlet/OliviaServlet")
   OID_Q_BASE = {storedProcedure: "getOracleID",
                 callingApplication: "OASIS"}
   OID_Q_OPTS = {quality: "NA",
