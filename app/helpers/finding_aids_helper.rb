@@ -4,7 +4,7 @@ module FindingAidsHelper
     doc.css('dao').map(&:remove)
     doc.css('daogrp').map(&:remove)
     finding_aid.components.each do |c|
-      component_did = doc.at("##{c.cid} did")
+      component_did = doc.at_xpath("//*[@id=\"#{c.cid}\"]//did")
       c.digitizations.each do |d|
         next unless d.urn
         component_did << render(inline: d.template.subbed_template, locals: { digitization: d })

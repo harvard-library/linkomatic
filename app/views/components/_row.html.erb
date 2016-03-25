@@ -1,7 +1,7 @@
 <tr>
   <td><%= link_to component.cid, edit_component_path(component) %></td>
   <td><%= component.name %></td>
-  <td id="cid-<%= component.cid %>">
+  <td data-id="cid-<%= component.cid %>">
     <ul class="list-unstyled">
       <% component.digitizations.each do |d| %>
         <li>
