@@ -86,7 +86,7 @@ class URNFetcher
     http = Net::HTTP.new(OLIVIA.host, OLIVIA.port)
     http.read_timeout = 120
 
-    logger.info "Fetch URNs for #{oid} at #{urns_path(oid)}"
+    logger.info "Fetch URNs via OLIVIA for #{oid} at #{urns_path(oid)}"
     if (res = http.request(Net::HTTP::Get.new(urns_path(oid)))).code == "200"
       if (urns = res.body.match(/(?<=URN: ).+?(?=<br>)/))
         logger.info "URNs returned: #{urns}"
@@ -104,7 +104,7 @@ class URNFetcher
     http = Net::HTTP.new(OLIVIA.host, OLIVIA.port)
     http.read_timeout = 120
 
-    logger.info "Fetch URNs for #{authpath}: #{component_id}"
+    logger.info "Fetch URNs from DRS2 for #{authpath}: #{component_id}"
     if (res = http.request(Net::HTTP::Get.new(urns2_path(component_id, authpath)))).code == "200"
       if (urns = res.body.match(/(?<=URN: ).+?(?=<br>)/))
         logger.info "URNs returned: #{urns}"
@@ -131,6 +131,8 @@ class URNFetcher
       get_urns(oid).each{|urn| component.digitizations.find_or_create_by(urn: urn) }
     elsif not (urns = get_drs2_pds_urns(component_id, authpath)).empty?
       urns.each{|urn| component.digitizations.find_or_create_by(urn: urn) }
+    elsif not (urns = get_drs2_pds_urns("#{component_id}-METS", authpath)).empty?
+      urns.each{|urn| component.digitizations.find_or_create_by(urn: urn) }  
     else
       component.digitizations.create(urn: nil) if component.digitizations.empty?
     end
