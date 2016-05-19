@@ -110,9 +110,11 @@ class URNFetcher
         logger.info "URNs returned: #{urns}"
         urns.to_s.split(',')
       else
+        logger.info "response body: #{res.body}"
         []
       end
     else
+      logger.info "Failed with response code #{res.code}"
       []
     end
   end
