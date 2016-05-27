@@ -65,8 +65,8 @@ class URNFetcher
                # The next three attempts represent common legacy practice in DRS1
                elsif res = try_request(component_id, authpath)
                  res.body
-               # A number of PDS records have malformed component IDs with a '-METS' suffix. ಠ_ಠ
-               elsif res = try_request("#{component_id}-METS", authpath)
+               # A number of PDS records have malformed component IDs with a '_mets' suffix. ಠ_ಠ
+               elsif res = try_request("#{component_id}_mets", authpath)
                  res.body
                elsif res = try_request(component_id, authpath, quality: "5")
                  res.body
@@ -132,6 +132,12 @@ class URNFetcher
     elsif not (urns = get_drs2_pds_urns(component_id, authpath)).empty?
       urns.each{|urn| component.digitizations.find_or_create_by(urn: urn) }
     elsif not (urns = get_drs2_pds_urns("#{component_id}-METS", authpath)).empty?
+      urns.each{|urn| component.digitizations.find_or_create_by(urn: urn) }  
+    elsif not (urns = get_drs2_pds_urns("#{component_id}_METS", authpath)).empty?
+      urns.each{|urn| component.digitizations.find_or_create_by(urn: urn) }  
+    elsif not (urns = get_drs2_pds_urns("#{component_id}-mets", authpath)).empty?
+      urns.each{|urn| component.digitizations.find_or_create_by(urn: urn) }  
+    elsif not (urns = get_drs2_pds_urns("#{component_id}_mets", authpath)).empty?
       urns.each{|urn| component.digitizations.find_or_create_by(urn: urn) }  
     else
       component.digitizations.create(urn: nil) if component.digitizations.empty?
