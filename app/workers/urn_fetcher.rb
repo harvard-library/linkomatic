@@ -68,6 +68,9 @@ class URNFetcher
                # A number of PDS records have malformed component IDs with a '_mets' suffix. ಠ_ಠ
                elsif res = try_request("#{component_id}_mets", authpath)
                  res.body
+               # A number of PDS records have malformed component IDs with a '-METS' suffix. ಠ_ಠ
+               elsif res = try_request("#{component_id}-METS", authpath)
+                 res.body
                elsif res = try_request(component_id, authpath, quality: "5")
                  res.body
                else
