@@ -145,7 +145,7 @@ class URNFetcher
     else
       component.digitizations.create(urn: nil) if component.digitizations.empty?
     end
-
+    logger.info "Done trying to fetch  #{authpath} : #{component_id}'s OID"
     # Tell all the clients a job has finished
     WebsocketRails[:urn_fetch_job].trigger :complete, {
       jid: jid,
